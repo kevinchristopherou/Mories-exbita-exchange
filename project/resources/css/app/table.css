@@ -1,0 +1,42 @@
+.table-sm td, .table-sm th{
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.table-sm td > div > div {
+    padding: 0rem;
+}
+
+.table-sm .badge {
+    padding: 0.35rem;
+}
+
+.table-title {
+    font-size: 1rem;
+    font-weight: bold;
+    float: left;
+    margin: 10px 0;
+}
+
+.table-filter {
+    font-size: 0.8rem;
+    font-weight: normal;
+    float: right;
+    margin: 0.5rem 0;
+}
+
+.table-filter .dropdown-menu {
+    margin: 0px 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.table-filter .dropdown-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.table-bordered {
+    border: none !important;
+}

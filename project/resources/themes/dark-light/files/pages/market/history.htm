@@ -1,0 +1,58 @@
+<div class="row" v-if="history">
+  <div class="col-xs-12 col-12">
+    <h5 class="text-center" v-if="theme != 'dark-light'">{{$t('market.history')}}
+      <icon name="arrow-up" class="text-success"></icon>
+      <icon name="arrow-down" class="text-danger"></icon>
+    </h5>
+
+    <b-table show-empty
+             stacked="xs"
+             :items="history"
+             :fields="fields"
+             :current-page="currentPage"
+             :class="theme != 'dark-light' ? 'table-striped table-bordered table-sm table-responsive-md text-right' : 'table table-borderless table-exbita table-striped table-responsive-sm'"
+             :empty-text="$t('market.transaction_no_history')"
+             :per-page="perPage">
+      <template  v-slot:cell(dateField)="data">
+        <div v-html="formatDateTime(data.item.time)">
+        </div>
+      </template>
+      <template  v-slot:cell(typeField)="data">
+        <div>
+          <!-- <span v-if="data.item.type === 'sell'" class="text-danger">
+            <icon name="arrow-down"></icon>
+            {{$t('market.transaction_'+data.item.type)}}
+          </span>
+          <span v-if="data.item.type === 'buy'" class="text-success">
+            <icon name="arrow-up"></icon>
+            {{$t('market.transaction_'+data.item.type)}}
+          </span> -->
+
+          <div class="sell-td" v-if="data.item.type === 'sell'">{{$t('market.transaction_'+data.item.type)}} <i> <img src="theme/sell.svg" alt=""> </i></div>
+          <div class="buy-td" v-if="data.item.type === 'buy'">{{$t('market.transaction_'+data.item.type)}} <i> <img src="theme/buy.svg" alt=""> </i></div>
+        </div>
+      </template>
+      <template  v-slot:cell(amountField)="data">
+        <div>
+          {{data.item.amount }}
+        </div>
+      </template>
+      <template  v-slot:cell(rateField)="data">
+        <div>
+          {{data.item.rate }}
+        </div>
+      </template>
+      <template  v-slot:cell(totalField)="data">
+        <div>
+          {{data.item.rate * data.item.amount | round(2)}}
+        </div>
+      </template>
+
+    </b-table>
+
+    <b-pagination class="pagination-sm paginationitems"
+                  v-if="history.length > perPage"
+                  :total-rows="history.length"
+                  :per-page="perPage" v-model="currentPage"></b-pagination>
+  </div>
+</div>

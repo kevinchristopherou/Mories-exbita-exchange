@@ -1,0 +1,15 @@
+Exbita Upgrade Guide 1.2.1
+
+If you purchased and downloaded 1.2.1 version already, you can ignore these upgrade steps.
+================================================
+
+1. Replace the following files:
+
+- resources/js/components/admin/AdminNavbar.htm 
+- resources/themes/dark-light/files/pages/market/orderbook.vue
+- resources/themes/dark-light/files/pages/market/orderbook.htm
+
+2. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+
+npm run production
+

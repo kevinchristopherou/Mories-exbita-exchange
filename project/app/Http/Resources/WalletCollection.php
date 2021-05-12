@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Http\Resources;
+
+use App\Http\Resources\Wallet as WalletResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+
+class WalletCollection extends ResourceCollection
+{
+    /**
+     * @var array
+     */
+    protected $withoutFields = [];
+
+    /**
+     * Transform the resource collection into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        return $this->processCollection($request);
+    }
+
+    public static function collection($resource)
+    {
+        return tap(new self($resource), function ($collection) {
+            $collection->collects = __CLASS__;
+        });
+    }
+
+    public function only(array $fields)
+    {
+        $this->withoutFields = $fields;
+
+        return $this;
+    }
+
+    /**
+     * Send fields to hide to WalletResource while processing the collection.
+     *
+     * @param $request
+     * @return array
+     */
+    protected function processCollection($request)
+    {
+        return $this->collection->map(function (WalletResource $resource) use ($request) {
+            return $resource->only($this->withoutFields)->toArray($request);
+        })->all();
+    }
+
+    public function with($request)
+    {
+        return [
+            'success' => true,
+        ];
+    }
+}

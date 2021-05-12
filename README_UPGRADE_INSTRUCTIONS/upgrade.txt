@@ -1,0 +1,79 @@
+IMPORTANT: Always backup your existing project files and database before upgrading.
+===================================================================================
+
+Exbita Upgrade Guide 2.0.0
+
+If you purchased and downloaded 2.0.0 version already, you can ignore these upgrade steps.
+
+================================================
+
+Please check upgrade-2.0.0-from-1.2.1 folder to get step-by-step instructions
+
+
+
+Exbita Upgrade Guide 2.0.1
+
+If you purchased and downloaded 2.0.1 version already, you can ignore these upgrade steps.
+
+================================================
+
+Please check upgrade-2.0.1-from-2.0.0 folder to get step-by-step instructions
+
+
+Exbita Upgrade Guide 2.0.2
+
+Please check upgrade-2.0.2-from-2.0.1 folder to get step-by-step instructions
+
+================================================
+
+
+Exbita Upgrade Guide 2.0.3
+
+Please check upgrade-2.0.3-from-2.0.2 folder to get step-by-step instructions
+
+================================================
+
+Exbita Upgrade Guide 2.0.4
+
+Please check upgrade-2.0.4-from-2.0.3 folder to get step-by-step instructions
+
+================================================
+
+Exbita Upgrade Guide 2.1.0
+
+Please check upgrade-2.1.0-from-2.0.4 folder to get step-by-step instructions
+
+================================================
+
+
+Exbita Upgrade Guide 2.1.1
+
+Please check upgrade-2.1.1-from-2.1.0 folder to get step-by-step instructions
+
+================================================
+
+Exbita Upgrade Guide 2.1.2
+
+Please check upgrade-2.1.2-from-2.1.1 folder to get step-by-step instructions
+
+================================================
+
+Exbita Upgrade Guide 2.2.0
+
+Please check upgrade-2.2.0-from-2.1.2 folder to get step-by-step instructions
+
+================================================
+
+Exbita Upgrade Guide 2.2.1
+
+Please check upgrade-2.2.1-from-2.2.0 folder to get step-by-step instructions
+
+================================================
+
+Exbita Upgrade Guide 2.2.2
+
+Please check upgrade-2.2.2-from-2.2.1 folder to get step-by-step instructions
+
+================================================
+
+

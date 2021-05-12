@@ -1,0 +1,62 @@
+<div>
+    <main class="p-5" v-if="fiatWallets">
+        <h3 class="title-h3 mt-3 color-dark-blue text-center">{{ $t('wallet.fiat')}}</h3>
+        <table class="table table-responsive-md text-left table-v2">
+            <thead>
+            <tr>
+                <th>{{ $t('wallet.coin')}}</th>
+                <th>{{ $t('wallet.available')}}</th>
+                <th>{{ $t('wallet.pending')}}</th>
+                <th>{{ $t('wallet.withdraw')}}</th>
+                <th>{{ $t('wallet.actions')}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="wallet in fiatWallets.data">
+                <td>{{ wallet.currency }}</td>
+                <td>{{ wallet.available }} {{ wallet.currency }}</td>
+                <td>{{ wallet.pending }} {{ wallet.currency }}</td>
+                <td>{{ wallet.withdraw_pending }} {{ wallet.currency }}</td>
+                <td>
+                    <router-link tag="a" class="btn btn-success btn-sm mt-1" :to="{ name: 'payments.deposit.fiat'}">
+                        {{ $t('deposit.deposit') }}
+                    </router-link>
+                    <router-link tag="a" class="btn btn-danger btn-sm mt-1" :to="{ name: 'payments.withdraw.fiat'}">
+                        {{ $t('withdraw.title') }}
+                    </router-link>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+    <main class="p-5" v-if="wallets">
+        <h3 class="title-h3 mt-3 color-dark-blue text-center">{{ $t('wallet.crypto')}}</h3>
+        <table class="table table-responsive-md text-left table-v2">
+            <thead>
+            <tr>
+                <th>{{ $t('wallet.coin')}}</th>
+                <th>{{ $t('wallet.available')}}</th>
+                <th>{{ $t('wallet.pending')}}</th>
+                <th>{{ $t('wallet.withdraw')}}</th>
+                <th>{{ $t('wallet.actions')}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="wallet in wallets.data">
+                <td>{{ wallet.currency }}</td>
+                <td>{{ wallet.available }} {{ wallet.currency }}</td>
+                <td>{{ wallet.pending }} {{ wallet.currency }}</td>
+                <td>{{ wallet.withdraw_pending }} {{ wallet.currency }}</td>
+                <td>
+                    <router-link tag="a" class="btn btn-success btn-sm mt-1" :to="{ name: 'payments.deposit.crypto'}">
+                        {{ $t('deposit.deposit') }}
+                    </router-link>
+                    <router-link tag="a" class="btn btn-danger btn-sm mt-1" :to="{ name: 'payments.withdraw.crypto'}">
+                        {{ $t('withdraw.title') }}
+                    </router-link>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+</div>

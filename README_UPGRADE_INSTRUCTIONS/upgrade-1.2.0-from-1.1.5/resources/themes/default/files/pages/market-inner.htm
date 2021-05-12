@@ -1,0 +1,115 @@
+<div>
+  <div v-if="market">
+
+    <div class="row">
+      <!-- CHART AREA -->
+      <div class="market-chart-container col-xs-12 col-md-8 mb-3 market-chart-fixed-height">
+        <iframe :src="chartUrl" class="market-chart-iframe" scrolling="no"></iframe>
+      </div>
+
+      <!-- MARKET STATS -->
+      <div class="market-values-container col-xs-12 col-md-4 mb-3 market-chart-fixed-height">
+        <h3><i v-bind:class="'cc ' + market.currency"></i> {{ market.name }}</h3>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.last_price') }}</span>
+          <span class="value">{{ market.last | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.bid_price') }}</span>
+          <span class="value">{{ market.bid | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.ask_price') }}</span>
+          <span class="value">{{ market.ask | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.highest_24h') }}</span>
+          <span class="value">{{ market.high_24h | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.lowest_24h') }}</span>
+          <span class="value">{{ market.low_24h | round(market.quote_currency_format_decimals)}} {{ market.quote_currency }}</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.change_24h') }}</span>
+          <span class="value">{{ market.change_24h | round(market.quote_currency_format_decimals) }} (%{{ market.change_24h_percent | round(2) }})</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.volume_24h') }}</span>
+          <span class="value">{{ market.volume_24h | round(market.currency_format_decimals) }}  {{ market.currency }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDER FORMS -->
+    <div class="row mt-4" v-if="authenticated && quoteWallet && wallet">
+      <div class="col-xs-12 col-md-6 mb-3">
+
+        <div class="clearfix">
+          <h3 class="float-left">{{ $t('market.buy_currency', {currency: market.currency_name})}}</h3>
+          <span class="tab-head-available">
+              {{ quoteWallet.available }} {{market.quote_currency}} {{$t('market.available')}}
+            </span>
+        </div>
+
+        <b-card no-body>
+          <b-tabs card>
+            <!--QUICK BUY TAB-->
+            <b-tab :title="$t('market.quick_buy')" active>
+              <quick-buy :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></quick-buy>
+            </b-tab>
+
+            <!--LIMIT BUY TAB-->
+            <b-tab :title="$t('market.place_order')">
+              <limit-buy :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></limit-buy>
+            </b-tab>
+          </b-tabs>
+        </b-card>
+
+      </div>
+      <div class="col-xs-12 col-md-6 mb-3">
+
+        <div class="clearfix">
+          <h3 class="float-left">{{ $t('market.sell_currency', {currency: market.currency_name})}}</h3>
+          <span class="tab-head-available">
+              {{ wallet.available}} {{market.currency}} {{$t('market.available')}}
+            </span>
+        </div>
+
+        <b-card no-body>
+          <b-tabs card>
+
+            <!--QUICK SELL TAB-->
+            <b-tab :title="$t('market.quick_sell')" active>
+              <quick-sell :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></quick-sell>
+            </b-tab>
+
+            <!--LIMIT SELL TAB-->
+            <b-tab :title="$t('market.place_order')">
+              <limit-sell :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></limit-sell>
+            </b-tab>
+          </b-tabs>
+        </b-card>
+
+      </div>
+    </div>
+
+    <!-- MY ORDERS BOOK -->
+    <my-orders :key="market.id" :market="market" v-if="authenticated"></my-orders>
+
+    <!-- ORDER BOOK -->
+    <orderbook :market="market"></orderbook>
+
+    <!-- MARKET HISTORY -->
+    <history :market="market"></history>
+
+    <my-history :market="market" v-bind:market-name="market.name" v-if="authenticated"></my-history>
+  </div>
+
+  <div v-else>
+    <icon name="spinner" spin scale="4x"></icon>
+    <div class="text-center">
+      <h3>{{ $t('market.loading',{name: marketName})}}</h3>
+    </div>
+  </div>
+</div>

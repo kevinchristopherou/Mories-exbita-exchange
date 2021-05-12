@@ -1,0 +1,12 @@
+<main class="inner-container">
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('page_not_found')}}</h3>
+
+  <div class="text-center">
+    <icon name="ban" scale="4x" class="text-danger"></icon>
+    <p class="my-3">{{ $t('page_not_found_text')}}</p>
+    <router-link :to="{ name: 'welcome' }" tag="a" class="btn btn-green">
+      {{ $t('go_home') }}
+    </router-link>
+  </div>
+
+</main>

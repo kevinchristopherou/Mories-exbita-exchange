@@ -1,0 +1,114 @@
+<main class="whitebox">
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('deposit_money') }}</h3>
+
+  <div v-show="!isWaiting">
+    <form v-on:submit.prevent>
+      <!-- Currency -->
+      <div class="form-group">
+        <label>{{ $t('deposit_currency') }}</label>
+        <select size="1" name="fiat_currency_id" class="form-control input-lg"
+                v-model="form.fiat_currency_id" :placeholder="$t('deposit_currency')"
+                v-on:change="setSelectedCurrency"
+                :class="{ 'is-invalid': form.errors.has('fiat_currency_id') }">
+          <option value="">{{ $t('deposit_currency') }}</option>
+          <option v-for="fiat in fiatCurrencies" v-bind:value="fiat.id">{{ fiat.symbol }}</option>
+        </select>
+        <has-error :form="form" field="fiat_currency_id"></has-error>
+      </div>
+
+      <div v-if="form.fiat_currency_id">
+        <!-- Amount -->
+        <div class="form-group">
+          <label>{{ $t('deposit_amount') }}</label>
+          <input class="form-control input-lg" v-on:change="formChange" type="number" step="0.01" name="amount"
+                 :placeholder="amountPlaceholder"
+                 v-model.number="form.amount" :class="{ 'is-invalid': form.errors.has('amount') }">
+          <has-error :form="form" field="amount"></has-error>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group text-center">
+          <button @click="confirmCheck()"
+                  class="btn btn-success"
+                  type="button"
+                  v-button-loading="busy">
+            {{ $t('deposit.deposit') }}
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <div v-if="selectedCurrency" class="form-group">
+    <p v-if="selectedCurrency.bank_name">
+      <strong>{{ $t('deposit.bank_name') }}:</strong> {{ selectedCurrency.bank_name }}
+    </p>
+    <p v-if="selectedCurrency.iban">
+      <strong>{{ $t('deposit.iban') }}:</strong> {{ selectedCurrency.iban }}
+    </p>
+    <p v-if="selectedCurrency.recipient">
+      <strong>{{ $t('deposit.recipient') }}:</strong> {{ selectedCurrency.recipient }}
+    </p>
+    <p v-if="selectedCurrency.swift_code">
+      <strong>{{ $t('deposit.swift_code') }}:</strong> {{ selectedCurrency.swift_code }}
+    </p>
+
+    <p v-if="depositDescription">
+      <strong>{{ $t('deposit.notes') }}:</strong> {{ depositDescription }}
+    </p>
+
+    <p v-if="form.description">
+      <strong>{{ $t('deposit_description_code') }}* :</strong> {{ form.description}}
+      <br><i>*{{ $t('deposit_code_provide')}}</i>
+    </p>
+  </div>
+
+  <div v-show="isWaiting">
+    <div class="mt-4 text-center">
+      <icon name="check-circle" class="text-success" scale="4x"></icon>
+      <h4>
+        {{ $t('deposit_payment_waiting_for_approval') }}
+      </h4>
+
+      <button @click="refreshDeposit" class="mt-5 btn btn-success" type="button">
+        {{ $t('deposit_create_new_deposit') }}
+      </button>
+    </div>
+  </div>
+
+  <h3 class="title-h3 mt-5 color-dark-blue text-center">{{ $t('deposit_history') }}</h3>
+
+  <laravel-pagination :dataset="deposits" @change="loadData"></laravel-pagination>
+  <table class="table table-sm table-bordered table-hover table-striped table-responsive-md">
+    <thead>
+    <tr>
+      <th>{{ $t('id') }}</th>
+      <th>{{ $t('deposit_amount') }}</th>
+      <th>{{ $t('deposit_code') }}</th>
+      <th>{{ $t('deposit_date') }}</th>
+      <th>{{ $t('deposit_status') }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="deposit in deposits.data">
+      <td>{{ deposit.id }}</td>
+      <td>{{ deposit.amount }} {{ deposit.fiat_currency.symbol }}</td>
+      <td>{{ deposit.description }}</td>
+      <td>{{ deposit.created_at | tz_datetime }}</td>
+      <td>
+          <span v-if="deposit.status == 'waiting'" class="badge badge-warning">
+            {{ $t('deposit_pending')}}
+          </span>
+        <!--@todo: add bank details popup -->
+        <!--<icon v-if="deposit.status == 'waiting'" name="info-circle"></icon>-->
+        <span v-if="deposit.status == 'approved'" class="badge badge-success">{{ $t('deposit_approved')}}</span>
+        <span v-if="deposit.status == 'rejected'" class="badge badge-danger" :title="getNote(deposit)">{{ $t('deposit_rejected')}}</span>
+        <icon v-if="deposit.status == 'rejected'" name="info-circle" class="text-muted"
+              :title="getNote(deposit)"></icon>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <laravel-pagination :dataset="deposits" @change="loadData"></laravel-pagination>
+</main>

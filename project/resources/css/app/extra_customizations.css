@@ -1,0 +1,36 @@
+.whitebox {
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+    padding: 2rem;
+    color: #868f95;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.05);
+}
+
+.text-light-grey {
+    color: #868f95 !important;
+}
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
+.modal-footer-ok-only-block .btn{
+    display: block;
+    width: 100%;
+}
+
+.div-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}

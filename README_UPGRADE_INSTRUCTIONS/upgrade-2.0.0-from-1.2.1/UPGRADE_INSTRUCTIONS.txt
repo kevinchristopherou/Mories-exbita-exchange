@@ -1,0 +1,76 @@
+Exbita Upgrade Guide 2.0.0
+
+IMPORTANT: Always backup your existing project files and database before upgrading.
+
+If you purchased and downloaded 2.0.0 version already, you can ignore these upgrade steps.
+================================================
+
+1. Replace the following files:
+
+- app/Facades/Api/GatewayBtc.php (delete app/Facades/Withdraw/GatewayBtc.php)
+- app/Facades/Api/GatewayEth.php (delete app/Facades/Withdraw/GatewayEth.php)
+- app/Facades/Api/GatewayCoinpayments.php (new file)
+- app/Http/Kernel.php
+- app/Http/Resources/Wallet.php
+- app/Http/Resources/Withdraw.php
+- app/Models/CoinpaymentsCoin.php (new file)
+- app/Models/Currency.php 
+- app/Models/Tx/TxCoinpayments.php (new file)
+- app/Models/Withdraw.php
+- app/Observers/CurrencyObserver.php
+- app/Providers/AppServiceProvider.php
+- app/Rules/AddressValidationRule.php
+- app/Traits/HasWalletsTrait.php
+- composer.json
+- composer.lock
+- config/app.php
+- config/cors.php (new file)
+- config/settings.php
+- database/migrations/2020_12_31_152156_add_dest_tag_to_wallets_table.php (new file)
+- database/migrations/2021_01_01_130743_create_tx_coinpayments_table.php (new file)
+- database/migrations/2021_01_01_144337_create_coinpayment_coins_table.php (new file)
+- database/migrations/2021_01_02_155558_change_symbol_field_on_currencies_table.php (new file)
+- database/migrations/2021_01_02_210501_change_tx_field_on_tx_coinpayments_table.php (new file)
+- database/migrations/2021_01_02_230243_add_tx_sender_field_to_withdrawal_table.php (new file)
+- database/migrations/2021_01_03_131054_add_dest_tag_field_to_withdrawal_table.php (new file)
+- database/seeds/SiteSettingsTableSeeder.php
+- resources/css/theme-addons.css
+- resources/js/pages/admin/exchange-settings/currencies.vue
+- resources/js/pages/admin/exchange-settings/markets.vue
+- resources/js/pages/admin/health-checker/health-checker.vue
+- resources/js/pages/admin/payments/withdraw_crypto.vue
+- resources/js/pages/admin/settings/coinpayments.vue (new file)
+- resources/js/pages/payments/deposit_crypto.htm
+- resources/js/pages/payments/deposit_crypto.vue
+- resources/js/pages/payments/withdraw_crypto.htm
+- resources/js/pages/payments/withdraw_crypto.vue
+- resources/js/pages/welcome/market.vue
+- resources/js/router/admin-routes.js
+- resources/lang/en/frontend.json
+- resources/lang/en/frontend_admin.json
+- resources/lang/tr/frontend.json
+- resources/lang/tr/frontend_admin.json
+- resources/themes/dark-light/files/pages/market/limit-sell.htm
+- resources/themes/dark-light/files/pages/market/orderbook.vue
+- resources/themes/dark-light/files/pages/market/orderbook.htm
+- resources/themes/dark-light/files/pages/market/quick-sell.htm
+- routes/api.php
+- resources/js/components/admin/AdminNavbar.htm 
+
+
+2. Download archive from https://exbita.com/wp-json/exbita-files/download/REPLACE_THIS_WITH_YOUR_PURCHASE_CODE
+
+3. Unzip archive and copy app folder and move to your project root folder (confirm replacing existing files) 
+
+4. Unzip archive and copy scripts/ethereum folder and move to your Ethereum Node script folder (confirm replacing existing files)
+
+5. Restart Ethereum Node script (running `node app.js`) file, then run `pm2 restart all` and `pm2 save` commands
+
+6. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+
+composer install
+php artisan migrate
+php artisan db:seed --class="SiteSettingsTableSeeder"
+npm run production
+php artisan config:cache
+

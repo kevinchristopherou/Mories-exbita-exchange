@@ -1,0 +1,74 @@
+Exbita Upgrade Guide 2.2.0
+
+IMPORTANT: Always backup your existing project files and database before upgrading.
+
+If you purchased and downloaded 2.2.0 version already, you can ignore these upgrade steps.
+================================================
+
+1. Replace the following files:
+
+IMPORTANT NOTE: If you made any changes manually on these pages (adding content etc), you have to save content before replacing. After you replace all files, bring back the content using Theme Editor or manually modify these files
+
+- /app/Helpers/SiteSettingsHelper.php
+- /app/Models/Transaction.php]
+- /app/Models/ReferralEarning.php
+- /app/User.php
+- /app/Http/Resources/ReferralEarning.php
+- /app/Http/Resources/ReferralEarningCollection.php
+- /app/Services/ReferralEarningsManager.php
+- /database/seeds/SettingsTableSeeder.php
+- /database/migrations/2021_01_26_153822_add_ref_field_to_users_table.php
+- /database/migrations/2021_01_26_212036_create_referral_earnings_table.php
+- /database/migrations/2021_01_27_105928_add_referral_cut_field_to_transactions_table.php
+- /routes/api.php
+- /resources/js/components/AdminNavbar.htm
+- /resources/js/components/App.vue
+- /resources/js/components/Navbar.htm
+- /resources/js/components/Topbar.htm
+- /resources/js/pages/admin/exchange-settings/commission.vue
+- /resources/js/pages/admin/exchange-settings/fiat-currencies.vue
+- /resources/js/pages/admin/referrals.vue
+- /resources/js/pages/settings/referral.vue
+- /resources/js/pages/settings/referral.htm
+- /resources/js/pages/auth/register.htm
+- /resources/js/pages/auth/register.vue
+- /resources/js/pages/wallets.vue
+- /resources/js/pages/wallets.htm
+- /resources/js/pages/home.vue
+- /resources/js/plugins/toasted.js
+- /resources/js/router/admin-routes.js
+- /resources/js/router/routes.js
+
+- /resources/themes/dark-light/css/theme.css
+- /resources/themes/dark-light/files/components/dark-light/DarkLightNavbar.htm
+- /resources/themes/dark-light/files/components/dark-light/DarkLightTopbar.htm
+- /resources/themes/dark-light/files/components/Navbar.htm
+- /resources/themes/dark-light/files/components/Topbar.htm
+
+- /resources/lang/en/frontend.json (if you made changes in this file, you have to find differences using online tools and merge new strings, if you don't do it you will lose your changes)
+
+- /resources/lang/en/frontend_admin.json (if you made changes in this file, you have to find differences using online tools and merge new strings, if you don't do it you will lose your changes)
+
+- /resources/lang/tr/frontend.json (if you made changes in this file, you have to find differences using online tools and merge new strings, if you don't do it you will lose your changes)
+
+- /resources/lang/tr/frontend_admin.json (if you made changes in this file, you have to find differences using online tools and merge new strings, if you don't do it you will lose your changes)
+
+
+2. Open this link https://exbita.com/wp-json/exbita-files/download/REPLACE_THIS_WITH_YOUR_PURCHASE_CODE
+ and download the missing files. 
+
+3. Unzip downloaded files and copy the following files to your project (confirm replacing):
+
+- /app/Helpers/ExchangeHelper.php
+- /app/Http/Controllers/Api/Admin/SettingsController.php
+- /app/Http/Controllers/Api/Admin/UserController.php
+- /app/Http/Controllers/Api/UserController.php
+- /app/Services/Broker.php
+- /app/Services/TransactionManager.php
+
+2. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+
+php artisan migrate
+php artisan db:seed --class="SettingsTableSeeder" (after this command adjust commission fees on admin dashboard)
+npm run production
+

@@ -1,0 +1,59 @@
+<div>
+
+  <div v-if="method === 'sms'" class="mb-4 text-center">
+    <div class="form-group has-error" v-if="smsRequestError">
+      {{ $t(smsRequestError)}}
+    </div>
+    <div class="form-group" v-if="smsSent">
+      {{ $t('two_fa_setup_otp_sms_success')}}
+    </div>
+  </div>
+
+  <div v-if="smsTrigger=='manual' && method == 'sms' && !smsSent" class="text-center">
+    <button class="btn btn-big btn-green mb-4"
+            v-on:click="resendSms"
+            v-button-loading="smsBusy">
+      {{ $t('send_sms')}}
+    </button>
+  </div>
+
+  <div v-show="smsShowResend" class="text-center clearfix my-4">
+    <div v-show="smsTimeout > 0" class="form-top-btn">
+
+      <button type="button" class="btn btn-default btn-big btn-green">{{smsTimeout | timeMMDD }}
+      </button>
+
+      <span class="form-two-fa-class">{{ $t('two_fa_setup_otp_sms_again') }}</span>
+    </div>
+
+    <div class="text-center mb-4" v-show="smsTimeout === 0">
+      <button type="button" class="btn btn-green btn-big"
+              v-on:click="resendSms" v-button-loading="smsBusy">
+        {{ $t('resend_verification_code') }}
+      </button>
+    </div>
+  </div>
+
+  <div class="form-group" :class="{'has-error' : verifyError}">
+    <label class="control-label" v-if="verifyError">
+      {{ $t(verifyError)}}
+    </label>
+    <input v-model="otp" type="text" name="otp" class="form-control input-lg"
+           :placeholder="$t('two_fa_otp')"
+           v-on:keyup.enter="verify"
+           v-on:change="emitOtp"
+           v-on:keypress="filterOtp"
+           v-bind:class="{'is-invalid' : verifyError}">
+  </div>
+
+  <div class="text-center mt-2">
+    <button class="btn btn-green btn-big" v-if="!buttonHide" v-on:click="verify" v-button-loading="busy">
+      {{ $t(buttonLabel) }}
+    </button>
+    <button class="btn btn-orange btn-big" v-if="showLogout" v-on:click.prevent="logout">
+      {{ $t('logout') }}
+    </button>
+    <button class="btn btn-orange btn-big" v-if="showAbort" v-on:click.prevent="abort">{{ $t('abort') }}</button>
+  </div>
+
+</div>

@@ -1,0 +1,36 @@
+Exbita Upgrade Guide 2.1.0
+
+IMPORTANT: Always backup your existing project files and database before upgrading.
+
+If you purchased and downloaded 2.1.0 version already, you can ignore these upgrade steps.
+================================================
+
+1. Replace the following files:
+
+IMPORTANT NOTE: If you made any changes manually on these pages (adding content etc), you have to save content before replacing. After you replace all files, bring back the content using Theme Editor or manually modify these files
+
+- resources/js/components/admin/AdminNavbar.htm 
+- resources/css/app/main.css
+- public/images/homepage (folder)
+- resources/js/layouts (folder)
+- resources/js/pages/welcome (folder)
+- resources/js/pages/welcome.htm
+- resources/js/pages/welcome.vue
+- resources/js/pages/terms.htm
+- resources/js/pages/support.htm
+- resources/js/pages/security.htm
+- resources/js/pages/privacy.htm
+- resources/js/pages/fees.htm
+- resources/js/pages/cookies.htm
+- resources/js/pages/contact.htm
+- resources/js/pages/about.htm
+- resources/js/pages/apidocs.vue
+- resources/views/index.blade.php
+
+
+2. Add to /resources/lang/en/frontend.json and /resources/lang/tr/frontend.json the last lines starting with "new_home_page"
+
+3. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+
+npm run production
+

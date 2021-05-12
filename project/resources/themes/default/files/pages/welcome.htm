@@ -1,0 +1,45 @@
+<div id="welcome-container">
+  <header id="header">
+    <nav class="navbar navbar-expand-md navbar-light clearfix" id="welcome-navbar">
+      <router-link class="navbar-brand text-uppercase" :to="{ name: 'welcome'}"
+                   v-if="sitesettings.SITE_LOGO.file_url === null">
+        {{ sitesettings.SITE_NAME.value }}
+      </router-link>
+      <router-link class="navbar-image"
+                   tag="div" v-else
+                   :to="{ name: 'home'}">
+        <span class="helper"></span>
+        <img :src="sitesettings.SITE_LOGO.file_url" height="50"
+             :class="{'invert-fixed': sitesettings.SITE_LOGO_INVERT.value == 1}">
+      </router-link>
+
+      <nav-mobile></nav-mobile>
+      <nav-desktop></nav-desktop>
+    </nav>
+
+  </header>
+
+  <section class="home-banner">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+          <h1 class="text-uppercase">{{ sitesettings.SITE_NAME.value }}</h1>
+          <h2>{{$t('crypto_exchange_platform')}}</h2>
+          <h3>{{$t('turkey_based_bitcoin_exchange_platform')}}</h3>
+          <router-link :to="{name: 'register' }" v-if="!authenticated">
+            <button type="button" class="btn btn-orange btn-lg">{{$t('create_account')}}</button>
+          </router-link>
+        </div>
+      </div>
+    </div>
+    <div id="about"></div>
+  </section>
+
+  <section>
+    <market></market>
+    <features></features>
+  </section>
+
+  <currencies></currencies>
+  <welcome-footer></welcome-footer>
+</div>

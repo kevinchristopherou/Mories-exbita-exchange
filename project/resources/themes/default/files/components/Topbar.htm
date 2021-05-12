@@ -1,0 +1,74 @@
+<section class="header-top clearfix">
+  <div class="header-top-left">
+    <ul class="header-currency-ul">
+      <router-link tag="li"
+                   :to="{ name: 'market.inner',params: {marketName: market.name}}"
+                   class="header-currency-li slideItem pointer topbar-market"
+                   v-for="market in topMarkets"
+                   :key="market.name">
+        <strong class="color-blue">{{market.name}}:</strong>{{market.last | round(market.quote_currency_format_decimals)}} {{ market.quote_currency }}
+        <span :class="getChangeColorClass(market.change_24h_percent)">%{{market.change_24h_percent | round(2)}}</span>
+      </router-link>
+    </ul>
+  </div>
+  <div class="header-top-right">
+    <div class="header-top-right-right">
+      <ul class="clearfix">
+        <li class="dropdown" id="total-balance-dropdown" v-if="user">
+          <a class="total-balance" id="popover-total-balance">
+            {{$t('topbar_balance.total_balance')}}: <strong>{{totalBalance | round(2)}} {{fiat_symbol}} </strong>
+          </a>
+
+          <b-popover target="popover-total-balance"
+                     placement="bottom"
+                     title=""
+                     triggers="click blur"
+                     class="popover-header-fixed"
+                     container="#total-balance-dropdown"
+                     @show="popoverShow">
+            <table class="table table-bordered table-sm balance-table">
+              <tr>
+                <th>{{$t('topbar_balance.currency')}}</th>
+                <th>{{$t('topbar_balance.balance')}}</th>
+                <th>{{$t('topbar_balance.rate')}}</th>
+                <th>{{fiat_symbol}} {{$t('topbar_balance.balance')}}</th>
+              </tr>
+
+              <tr v-for="wallet in fiatWallets">
+                <td>{{ wallet.symbol}}</td>
+                <td>{{ wallet.balance| round(2) }}</td>
+                <td>{{ wallet.rate }}</td>
+                <td>{{ wallet.fiatBalance | round(2) }} {{fiat_symbol}}</td>
+              </tr>
+
+              <tr v-for="wallet in wallets">
+                <td>{{ wallet.symbol}}</td>
+                <td>{{ wallet.balance| round(8) }}</td>
+                <td>{{ wallet.rate | round(2) }} {{fiat_symbol}}</td>
+                <td>{{ wallet.fiatBalance | round(2) }} {{fiat_symbol}}</td>
+              </tr>
+            </table>
+          </b-popover>
+        </li>
+        <li v-if="user">
+          <router-link tag="a" class="btn btn-green" :to="{ name: 'payments.deposit.fiat'}">
+            {{ $t('deposit.deposit') }}
+          </router-link>
+        </li>
+
+        <li class="dropdown">
+          <a class="topbar-language-dropdown" data-toggle="dropdown">
+            <icon name="language"></icon>&nbsp;&nbsp; {{getLocale}}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right language">
+            <ul class="dropdown-ul">
+              <li v-for="locale in locales">
+                <a href="#" v-on:click.prevent="setLocale({locale:locale.locale})">{{ locale.name }}</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,13 @@
+.nav-item {
+    cursor: pointer;
+}
+
+/* welcome page nav bar */
+#welcome-navbar .nav-link {
+    text-transform: uppercase;
+}
+
+/* inner page nav bar */
+#navbarNav .nav-link {
+    text-transform: uppercase;
+}

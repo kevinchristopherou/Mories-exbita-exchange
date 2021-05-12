@@ -1,0 +1,22 @@
+Exbita Upgrade Guide 2.1.1
+
+IMPORTANT: Always backup your existing project files and database before upgrading.
+
+If you purchased and downloaded 2.1.1 version already, you can ignore these upgrade steps.
+================================================
+
+1. Replace the following files:
+
+IMPORTANT NOTE: If you made any changes manually on these pages (adding content etc), you have to save content before replacing. After you replace all files, bring back the content using Theme Editor or manually modify these files
+
+- /resources/js/layout/main.vue
+- /resources/themes/default/css/theme.css
+- /resources/css/theme.css
+- /resources/webpack.mix.js
+- /resources/js/pages/welcome/footer.vue
+- /resources/js/components/AdminNavbar.htm
+
+2. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+
+npm run production
+

@@ -1,0 +1,80 @@
+.orderbook-table-container {
+    padding: 0;
+    border: 1px solid #BBB;
+}
+
+.orderbook-header-table {
+    margin: 0;
+    border-bottom: 1px solid #BBB;
+}
+
+.orderbook-footer-table {
+    margin: 0;
+    border-top: 1px solid #BBB;
+}
+
+.buy-sell-table-container {
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.table-sell td, .table-buy td, .table-sell th, .table-buy th {
+
+}
+
+.orderbook-table-container td, .orderbook-table-container th {
+    text-align: right;
+    width: 25% !important;
+    position: relative;
+    border: none;
+}
+
+.orderbook-table-container td.orderbook-actions, .orderbook-table-container th.orderbook-actions {
+    min-width: 40px !important;
+    max-width: 40px !important;
+    width: 40px !important;
+}
+
+.table-sell, .table-buy {
+    margin: 0px;
+}
+
+.table-sell tr:nth-child(even) {
+    background-color: #F4DADA;
+}
+
+.table-sell tr:nth-child(odd) {
+    background-color: #FFE4E4;
+}
+
+.table-buy tr:nth-child(even) {
+    background-color: #DAF4DA;
+}
+
+.table-buy tr:nth-child(odd) {
+    background-color: #E4FFE4;
+}
+
+.table-sell span, .table-buy span,
+.table-sell button, .table-buy button {
+    position: relative;
+    z-index: 2;
+}
+
+.table-buy .qbar {
+    background-color: #a2ffa2;
+    left: 0px;
+}
+
+.table-sell .qbar {
+    background-color: #ffa2a263;
+    right: 0px;
+}
+
+.qbar {
+    position: absolute;
+    z-index: 1;
+    top: 1px;
+    bottom: 1px;
+}

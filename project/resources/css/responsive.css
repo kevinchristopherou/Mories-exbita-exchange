@@ -1,0 +1,289 @@
+@media (max-width: 1199px) {
+
+    .markets {
+        width: 100%;
+    }
+
+    .currency-ul-out {
+        margin-right: 0;
+    }
+
+    .header-top-left {
+        /*display: none !important;*/
+    }
+
+    #secure-footer .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+}
+
+@media (max-width: 992px) {
+
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .container-fluid-row {
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+
+    .navbar {
+        padding-left: 0.9375rem;
+        padding-right: 0.9375rem;
+    }
+
+    #header .navbar-expand-md .navbar-nav .nav-link {
+        padding-left: 1.1875rem !important;
+        padding-right: 1.1875rem !important;
+    }
+
+    .confidently {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    #header .dropdown-menu:before,
+    #header .dropdown-menu:after {
+        right: 20px;
+    }
+
+    body {
+        padding-left: 0;
+    }
+
+    #secure-header .navbar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+
+    #secure-header .navbar-brand {
+        width: auto;
+        display: inline-block;
+        border-bottom: 0;
+        min-width: 200px;
+    }
+
+    #secure-header .navbar-light .navbar-toggler {
+        float: right;
+        height: 50px;
+        width: 50px;
+        margin: 0;
+    }
+
+    #secure-header .navbar-collapse {
+        border-top: 1px solid #3c4a55;
+    }
+
+    .header-top {
+        padding-left: 15px;
+        padding-right: 15px;
+        position: relative;
+    }
+
+    #secure-main {
+        padding-top: 35px;
+    }
+
+    #secure-footer .navbar {
+        position: static;
+    }
+
+    #secure-footer .navbar-light .navbar-toggler {
+        height: 60px;
+        width: 60px;
+        margin: 0;
+        margin-right: -15px;
+    }
+
+    #secure-footer .navbar-collapse {
+        position: absolute;
+        left: -15px;
+        right: -15px;
+        bottom: 100%;
+        background-color: #3c4a55;
+    }
+
+    #secure-footer .navbar-expand-lg .navbar-nav .nav-item {
+        padding: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-left: 0;
+    }
+
+    #secure-footer .navbar-expand-lg .navbar-nav .nav-link {
+        padding: 10px 15px;
+    }
+
+    #secure-footer .footer-main {
+        display: block;
+        display: block;
+        -ms-flex-wrap: none;
+        flex-wrap: none;
+        -ms-flex-align: none;
+        align-items: none;
+        -ms-flex-pack: none;
+        justify-content: none;
+    }
+
+    #secure-footer .footer-main-left,
+    #secure-footer .footer-main-right {
+        float: left;
+    }
+
+    #secure-footer .footer-main-center {
+        float: right;
+    }
+
+    #secure-main {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+}
+
+@media (max-width: 767px) {
+
+    .btn {
+        padding-left: 1.875rem;
+        padding-right: 1.875rem;
+    }
+
+    h2, .h2 {
+        font-size: 1.625rem;
+    }
+
+    #header .btn-login-out,
+    #header .language-out {
+        display: none !important;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 1.25rem 0.9375rem;
+    }
+
+    #header .navbar-light .navbar-nav .show > .nav-link:before,
+    #header .navbar-light .navbar-nav .active > .nav-link:before,
+    #header .navbar-light .navbar-nav .nav-link.show:before,
+    #header .navbar-light .navbar-nav .nav-link.active:before,
+    #header .navbar-light .navbar-nav .nav-link:focus:before,
+    #header .navbar-light .navbar-nav .nav-link:hover:before {
+        left: 15px;
+        margin-left: 0;
+        bottom: 0;
+    }
+
+    #header .navbar-collapse {
+        background-color: #fff;
+        float: left;
+        width: 100%;
+    }
+
+    #header .navbar-light .navbar-nav .show > .nav-link,
+    #header .navbar-light .navbar-nav .active > .nav-link,
+    #header .navbar-light .navbar-nav .nav-link.show,
+    #header .navbar-light .navbar-nav .nav-link.active,
+    #header .navbar-light .navbar-nav .nav-link:focus,
+    #header .navbar-light .navbar-nav .nav-link:hover,
+    #header .navbar-light .navbar-nav .nav-link {
+        color: #3D4B55;
+    }
+
+    #header .navbar {
+        display: block;
+    }
+
+    #header .navbar-brand {
+        display: block;
+        float: left;
+    }
+
+    #header .btn-login {
+        float: right;
+    }
+
+    #header .language-mobile {
+        float: right;
+    }
+
+    #header .navbar-toggler {
+        float: right;
+    }
+
+    #header.header-fixed .navbar-light .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(61, 75, 85, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+
+    .home-banner h1,
+    .home-banner .h1 {
+        font-size: 2.5rem;
+        letter-spacing: 0;
+    }
+
+    .home-banner h2, .home-banner .h2 {
+        font-size: 1.625rem;
+        letter-spacing: 0;
+    }
+
+    .markets h3,
+    .markets .h3 {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .header-top-right,
+    .header-top-right-left,
+    .header-top-right-right {
+        float: none;
+    }
+
+    .header-top-right-right > ul {
+        padding-left: 0;
+    }
+
+}
+
+@media (max-width: 566px) {
+
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+
+    #header .btn-login .btn {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #header .navbar-toggler {
+        width: 50px;
+    }
+
+    .table {
+        font-size: 13px;
+    }
+
+    .table th,
+    .table td {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    #secure-footer .footer-main-right > ul > li > a > span {
+        display: none;
+    }
+
+    #secure-footer .social-link > li > a > img {
+        padding-right: 0;
+    }
+
+}
+
+@media (min-width: 768px) {
+    .navbar-expand-md .navbar-nav .nav-link {
+        padding-left: 2.1875rem;
+        padding-right: 2.1875rem;
+    }
+}

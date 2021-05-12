@@ -1,0 +1,225 @@
+<main class="whitebox text-center" v-if="user">
+
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('id_verification') }}</h3>
+
+  <div v-if="user.id_verified">
+    <div class="mt-4">
+      <icon name="check-circle" class="text-success" scale="4x"></icon>
+      <br>
+      {{ $t('idv_already_verified') }}
+    </div>
+  </div>
+
+  <div v-else>
+
+    <icon name="spinner" spin scale="4x" v-if="loading"></icon>
+    <!-- PENDING DOCUMENTS WARNING -->
+    <div v-if="waitingDocuments && !loading">
+      <p>{{$t('idv_message_waiting')}}</p>
+
+      <h3 class="title-h3 color-dark-blue text-center">{{$t('idv_documants_waiting_approval')}}</h3>
+
+      <b-card no-body>
+        <b-tabs card>
+          <b-tab active>
+            <template slot="title">
+                <span class="text-green">
+                  <i class="fa fa-check-square-o"></i> {{$t('idv_basic_information')}}
+                </span>
+            </template>
+
+            <div class="text-left">
+              <strong class="my-2">{{$t('idv_name')}}</strong>: {{waitingDocuments.name}}
+              <br/>
+              <strong class="my-2">{{$t('idv_ssid')}}</strong>: {{waitingDocuments.ssid}}
+              <br/>
+              <strong class="my-2">{{$t('idv_address')}}</strong>: {{waitingDocuments.address}}
+            </div>
+          </b-tab>
+
+          <!--SECOND TAB: ID PHOTO-->
+          <b-tab>
+            <template slot="title">
+                <span class="text-green">
+                  <i class="fa fa-check-square-o"></i> {{$t('idv_identity_photo')}}
+                </span>
+            </template>
+
+            <div>
+              <img v-bind:src="waitingDocuments.identity_photo.signed_url"
+                   class="width-full-height-auto"/>
+            </div>
+          </b-tab>
+
+          <!--THIRD TAB: SELFIE PHOTO-->
+          <b-tab>
+            <template slot="title">
+                <span class="text-green">
+                  <i class="fa fa-check-square-o"></i> {{$t('idv_selfie_photo')}}
+                </span>
+            </template>
+            <div>
+              <img class="width-full-height-auto" v-bind:src="waitingDocuments.selfie_photo.signed_url"
+                   />
+            </div>
+          </b-tab>
+
+          <!--FOURTH TAB: ADDRESS PHOTO-->
+          <b-tab>
+            <template slot="title">
+                <span class="address-photo-label">
+                  <i class="fa fa-check-square-o"></i> {{$t('idv_address_photo')}}
+                </span>
+            </template>
+            <div>
+              <img v-bind:src="waitingDocuments.address_photo.signed_url"
+                   class="document-image-width" />
+            </div>
+          </b-tab>
+        </b-tabs>
+      </b-card>
+    </div>
+
+    <!-- UPLOAD FORM -->
+    <div v-if="!waitingDocuments && showForm && !loading">
+
+      <div class="has-error" v-if="error">
+        {{$t(error)}}
+      </div>
+
+      <b-card no-body>
+        <b-tabs card v-model="activeTab">
+          <b-tab active>
+            <template slot="title">
+                <span :style="{color: stepOneCompleted ? '#27AE60' : '#666'}">
+                  <i v-if="stepOneCompleted" class="fa fa-check-square-o"></i> {{$t('idv_basic_information')}}
+                </span>
+            </template>
+
+            <div class="form-group">
+              <div class="text-left mb-2"><strong>{{$t('idv_name')}}:</strong></div>
+              <label class="control-label" v-if="errors.name">
+                {{ $t(errors.name)}}
+              </label>
+              <input class="form-control input-lg" :placeholder="$t('idv_name')" type="text"
+                     v-model="form.name" :class="{ 'is-invalid': errors.name }">
+            </div>
+            <div class="form-group">
+              <div class="text-left mb-2"><strong>{{$t('idv_ssid')}}:</strong></div>
+              <label class="control-label" v-if="errors.ssid">
+                {{ $t(errors.ssid)}}
+              </label>
+              <input class="form-control input-lg" :placeholder="$t('idv_ssid')" type="text"
+                     v-model="form.ssid" :class="{ 'is-invalid': errors.ssid }">
+            </div>
+
+            <div class="form-group">
+              <div class="text-left mb-2"><strong>{{$t('idv_address')}}:</strong></div>
+              <label class="control-label" v-if="errors.address">
+                {{ $t(errors.address)}}
+              </label>
+              <textarea class="form-control input-lg" :placeholder="$t('idv_address_placeholder')" type="text"
+                        v-model="form.address" :class="{ 'is-invalid': errors.address }" rows="5"></textarea>
+            </div>
+            <hr/>
+            <button class="btn btn-green mt-4" :disabled="!stepOneCompleted" v-on:click="activeTab++">
+              {{$t('next_step')}}
+            </button>
+          </b-tab>
+
+          <!--SECOND TAB: ID PHOTO-->
+          <b-tab :disabled="!stepOneCompleted">
+            <template slot="title">
+                <span :style="{color: stepTwoCompleted ? '#27AE60' : '#666'}">
+                  <i v-if="stepTwoCompleted" class="fa fa-check-square-o"></i> {{$t('idv_identity_photo')}}
+                </span>
+            </template>
+
+            <div class="text-left"><strong>{{$t('idv_identity_photo_label')}}:</strong></div>
+            <file-upload :image-preview="true"
+                         :help-text="identityHelpText"
+                         :max-size="4*1024*1024"
+                         example-photo="/images/verification_example_1.png"
+                         accept="image/*"
+                         v-on:uploadComplete="setIdentityFile"
+                         v-on:clearFile="clearIdentityFile">
+            </file-upload>
+            <hr/>
+            <div class="mt-4">
+              <button class="btn btn-orange" v-on:click="activeTab--">{{$t('prev_step')}}</button>
+              <button class="btn btn-green" :disabled="!stepTwoCompleted" v-on:click="activeTab++">
+                {{$t('next_step')}}
+              </button>
+            </div>
+          </b-tab>
+
+          <!--THIRD TAB: SELFIE PHOTO-->
+          <b-tab :disabled="!stepOneCompleted || !stepTwoCompleted">
+            <template slot="title">
+                <span :style="{color: !stepThreeCompleted ? '#666' : '#27AE60'}">
+                  <i v-if="stepThreeCompleted" class="fa fa-check-square-o"></i> {{$t('idv_selfie_photo')}}
+                </span>
+            </template>
+            <div class="text-left"><strong>{{$t('idv_selfie_photo_label')}}:</strong></div>
+            <file-upload :image-preview="true"
+                         :help-text="selfieHelpText"
+                         :max-size="4*1024*1024"
+                         example-photo="/images/verification_example_2.png"
+                         accept="image/*"
+                         v-on:uploadComplete="setSelfieFile"
+                         v-on:clearFile="clearSelfieFile">
+            </file-upload>
+            <hr/>
+            <div class="mt-4">
+              <button class="btn btn-orange" v-on:click="activeTab--">{{$t('prev_step')}}</button>
+              <button class="btn btn-green" :disabled="!stepThreeCompleted" v-on:click="activeTab++">
+                {{$t('next_step')}}
+              </button>
+            </div>
+          </b-tab>
+
+          <!--FOURTH TAB: ADDRESS PHOTO-->
+          <b-tab :disabled="!stepOneCompleted || !stepTwoCompleted || !stepThreeCompleted"
+                 :title-item-class="tab4Class">
+            <template slot="title">
+                <span :style="{color: !stepFourCompleted ? '#666' : '#27AE60'}">
+                  <i v-if="stepFourCompleted" class="fa fa-check-square-o"></i> {{$t('idv_address_photo')}}
+                </span>
+            </template>
+            <div class="text-left"><strong>{{$t('idv_address_photo_label')}}:</strong></div>
+            <file-upload :image-preview="true"
+                         :help-text="addressHelpText"
+                         :max-size="4*1024*1024"
+                         example-photo="/images/verification_example_3.png"
+                         accept="image/*"
+                         v-on:uploadComplete="setAddressFile"
+                         v-on:clearFile="clearAddressFile">
+            </file-upload>
+            <hr/>
+            <div class="mt-4">
+              <button class="btn btn-orange" v-on:click="activeTab--">{{$t('prev_step')}}</button>
+              <button class="btn btn-green" :disabled="!stepFourCompleted || buttonDisabled || busy"
+                      v-on:click="sendDocuments" v-button-loading="busy">{{$t('idv_complete')}}
+              </button>
+            </div>
+          </b-tab>
+        </b-tabs>
+      </b-card>
+
+      <div class="form-group mt-3">
+        <button class="btn btn-danger"
+                v-on:click="showForm = false">
+          {{$t('abort')}}
+        </button>
+      </div>
+
+    </div>
+
+    <!-- SHOW START PROCESS BUTTON -->
+    <div v-if="!waitingDocuments && !showForm && !loading">
+      <p>{{$t('idv_message')}}</p>
+      <button class="btn btn-green" v-on:click="toggleForm">{{$t('idv_start')}}
+      </button>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,18 @@
+Exbita Upgrade Guide 2.0.1
+
+IMPORTANT: Always backup your existing project files and database before upgrading.
+
+If you purchased and downloaded 2.0.1 version already, you can ignore these upgrade steps.
+================================================
+
+1. Replace the following files:
+
+- resources/js/store/modules/markets.js
+- resources/themes/dark-light/files/pages/market/orderbook.htm
+- resources/js/components/admin/AdminNavbar.htm 
+
+
+2. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+
+npm run production
+

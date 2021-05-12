@@ -1,0 +1,32 @@
+.topbar-market:hover {
+  background: #DDD;
+}
+
+.topbar-language-dropdown {
+  text-transform: uppercase;
+}
+
+.topbar-language-dropdown, .total-balance {
+  cursor: pointer;
+  color: #3D4B55 !important;
+}
+
+.topbar-language-dropdown:hover, .total-balance {
+  text-decoration: none;
+  color: #3D4B55 !important;
+}
+
+.balance-table {
+  width: 400px;
+  margin-top: 10px;
+}
+
+.balance-table th, .balance-table td {
+  padding: 6px;
+  line-height: 12px !important;
+}
+
+#total-balance-dropdown .popover {
+  width: 427px !important;
+  max-width: 427px !important;
+}

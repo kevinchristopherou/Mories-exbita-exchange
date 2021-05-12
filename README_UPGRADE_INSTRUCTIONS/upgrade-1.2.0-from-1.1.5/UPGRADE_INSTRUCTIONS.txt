@@ -1,0 +1,64 @@
+Exbita Upgrade Guide 1.2.0
+If you purchased and downloaded 1.2.0 version already, you can ignore these upgrade steps.
+================================================
+
+1. Replace the following files:
+
+- package.json
+- package-lock.json
+- webpack.mix.js
+- webpack.mix.preview.js
+- app/Http/Controllers/Api/UserController.php
+- app/Http/Middleware/CheckUserVerified.php
+- app/Services/MarketManager.php
+- app/Models/Withdraw.php
+- app/Http/Resources/Withdraw.php
+- app/Console/Commands/LicenseStateCommand.php
+- app/Console/Kernel.php
+- app/Traits/HasMoneyFieldsTrait.php
+- app/User.php
+- database/seeds/SiteSettingsTableSeeder.php
+- resources/js/pages/admin/settings/branding.vue 
+- resources/js/pages/admin/users.vue 
+- resources/js/pages/admin/verifications.vue 
+- resources/js/pages/admin/payments/deposit_crypto.vue 
+- resources/js/pages/admin/payments/withdraw_crypto.vue 
+- resources/js/pages/admin/payments/deposit_fiat.vue 
+- resources/js/pages/admin/payments/withdraw_fiat.vue 
+- resources/js/pages/payments - copy all files inside this folder
+- resources/js/pages/auth/login.htm 
+- resources/js/pages/auth/login.vue 
+- resources/js/pages/auth/register.htm 
+- resources/js/pages/auth/register.vue
+- resources/js/components/admin/AdminNavbar.htm 
+- resources/css/theme-addons.vue 
+- resources/lang/en/frontend.json 
+- resources/lang/tr/frontend.json 
+- resources/views/scripts.blade.php
+- resources/views/trading-view.blade.php
+- resources/sass/_variables.scss
+- resources/sass/app.scss
+- config/settings.php
+- config/app.php
+
+2. Remove the following file
+- public/trading-view
+
+3. Add the following files from update folder
+- resources/themes
+- public/trading-view
+- database/migrations/2020_12_24_115152_add_mail_sent_at_to_users_table.php
+
+4. Open .env file and add the following variables:
+APP_THEME="dark-light"
+KYC_STATE="1"
+
+5. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+npm install
+npm run production
+composer dump-autoload
+composer install
+php artisan migrate
+php artisan db:seed --class=SiteSettingsTableSeeder (IMPORTANT NODE: copy .env file to somewhere, run this command and replace .env file from previously copied version)
+php artisan config:cache
+

@@ -1,0 +1,158 @@
+<header id="secure-header">
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <router-link class="navbar-brand text-uppercase" :to="{ name: 'home'}"
+                 v-if="sitesettings.SITE_LOGO.file_url === null">
+      <!--  {{ sitesettings.SITE_NAME.value }} -->
+        <div v-if="sitesettings.SITE_NAME.value"><span class="text-400">{{ sitesettings.SITE_NAME.value }}</span></div>
+        <div v-if="!sitesettings.SITE_NAME.value">EX<span class="text-400">BITA</span></div>
+    </router-link>
+    <router-link class="navbar-brand navbar-image" tag="div" v-else
+                 :to="{ name: 'home'}">
+      <span class="helper"></span>
+      <img :src="sitesettings.SITE_LOGO.file_url" height="50"/>
+    </router-link>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+
+        <section>
+          <router-link tag="li" class="nav-item" :to="{ name: 'markets'}">
+            <a class="nav-link">
+              <icon name="bitcoin"></icon>
+              {{$t('market.marketplace')}}
+            </a>
+          </router-link>
+        </section>
+
+        <section v-if="!authenticated">
+          <router-link tag="li" class="nav-item" :to="{ name: 'login'}">
+            <a class="nav-link">
+              <icon name="sign-in"></icon>
+              {{$t('login')}}
+            </a>
+          </router-link>
+          <router-link tag="li" class="nav-item" :to="{ name: 'register'}">
+            <a class="nav-link">
+              <icon name="user-plus"></icon>
+              {{$t('register')}}
+            </a>
+          </router-link>
+        </section>
+
+        <!--Authenticated Route Links-->
+        <section v-else>
+
+        <router-link tag="li" class="nav-item" :to="{ name: 'wallets'}">
+            <a class="nav-link">
+                <icon name="money"></icon>
+                {{$t('wallets')}}
+            </a>
+        </router-link>
+
+          <router-link tag="li" class="nav-item" :to="{ name: 'orders'}">
+            <a class="nav-link">
+              <icon name="calendar"></icon>
+              {{$t('orders')}}
+            </a>
+          </router-link>
+
+          <li class="nav-item" :class="{ show: isActive('payments') }">
+            <a class="nav-link dropdown-toggle">
+              <icon name="suitcase"></icon>
+              {{$t('payments')}}
+            </a>
+            <ul class="dropdown-menu" :class="{ show: isActive('payments') }">
+
+              <li class="nav-item" :class="{ show: isActive('payments.deposit') }">
+                <a class="nav-link dropdown-toggle">
+                  <icon class="ml-1" name="plus"></icon>
+                  {{$t('deposit.deposit')}}
+                </a>
+                <ul class="dropdown-menu" :class="{ show: isActive('payments.deposit') }">
+
+                  <router-link tag="li" :to="{name: 'payments.deposit.fiat'}" class="dropdown-item">
+                    <icon class="ml-2" name="money"></icon>
+                    {{ $t('payments_fiat_wallets')}}
+                  </router-link>
+
+                  <router-link tag="li" :to="{name: 'payments.deposit.crypto'}" class="dropdown-item">
+                    <icon class="ml-2" name="bitcoin"></icon>
+                    {{ $t('payments_crypto_wallets')}}
+                  </router-link>
+
+                </ul>
+              </li>
+
+              <li class="nav-item" :class="{ show: isActive('payments.withdraw') }">
+                <a class="nav-link dropdown-toggle">
+                  <icon class="ml-1" name="minus"></icon>
+                  {{$t('withdraw.title')}}
+                </a>
+                <ul class="dropdown-menu" :class="{ show: isActive('payments.withdraw') }">
+
+                  <router-link tag="li" :to="{name: 'payments.withdraw.fiat'}" class="dropdown-item">
+                    <icon class="ml-2" name="money"></icon>
+                    {{ $t('payments_fiat_wallets')}}
+                  </router-link>
+
+                  <router-link tag="li" :to="{name: 'payments.withdraw.crypto'}" class="dropdown-item">
+                    <icon class="ml-2" name="bitcoin"></icon>
+                    {{ $t('payments_crypto_wallets')}}
+                  </router-link>
+
+                </ul>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item" :class="{ show: isActive('settings') }">
+            <a class="nav-link dropdown-toggle">
+              <icon name="cog"></icon>
+              {{$t('settings')}}
+            </a>
+            <ul class="dropdown-menu" :class="{ show: isActive('settings') }">
+              <router-link tag="li" :to="{name: 'settings.password'}" class="dropdown-item">
+                <icon class="ml-1" name="unlock-alt"></icon>
+                {{ $t('change_password')}}
+              </router-link>
+
+              <router-link tag="li" :to="{name: 'settings.two_fa_setup'}" class="dropdown-item">
+                <icon class="ml-1" name="qrcode"></icon>
+                {{ $t('two_factor_auth')}}
+              </router-link>
+
+              <router-link tag="li" :to="{name: 'settings.id_verification'}" class="dropdown-item">
+                <icon class="ml-1" name="address-card"></icon>
+                {{ $t('id_verification')}}
+              </router-link>
+
+              <router-link tag="li" :to="{name: 'settings.personal_access_token'}" class="dropdown-item">
+                <icon class="ml-1" name="key"></icon>
+                {{ $t('token.api_access')}}
+              </router-link>
+
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" v-on:click="logout">
+              <icon name="sign-out" scale="2x"></icon>
+              {{$t('logout')}}
+            </a>
+          </li>
+
+          <li v-if="isAd" class="nav-item">
+            <a class="nav-link" href="/a/">
+              <icon name="user-secret"></icon>
+              {{adTitle}} Panel
+            </a>
+          </li>
+
+        </section>
+      </ul>
+    </div>
+  </nav>
+</header>

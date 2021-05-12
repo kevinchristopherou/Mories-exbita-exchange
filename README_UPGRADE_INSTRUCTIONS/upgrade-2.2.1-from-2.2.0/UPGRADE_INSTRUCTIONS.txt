@@ -1,0 +1,46 @@
+Exbita Upgrade Guide 2.2.1
+
+IMPORTANT: Always backup your existing project files and database before upgrading.
+
+If you purchased and downloaded 2.2.1 version already, you can ignore these upgrade steps.
+================================================
+
+1. Replace the following files:
+
+IMPORTANT NOTE: If you made any changes manually on these pages (adding content etc), you have to save content before replacing. After you replace all files, bring back the content using Theme Editor or manually modify these files
+
+- /app/Helpers/TranslationsHelper.php
+- /resources/js/components/AdminNavbar.htm
+- /resources/js/pages/admin/exchange-settings/fiat-currencies.vue
+- /resources/js/pages/auth/register.htm
+- /resources/js/pages/auth/register.vue
+- /resources/js/pages/my-orders/filled-orders.htm
+- /resources/js/pages/my-orders/open-orders.htm
+- /resources/js/pages/settings/referral.htm
+- /resources/js/pages/settings/referral.vue
+- /resources/js/pages/markets.htm
+- /resources/js/pages/wallets.htm
+- /resources/themes/dark-light/css/theme.css
+- /resources/themes/dark-light/files/components/dark-light/DarkLightBottombar.htm
+- /resources/themes/dark-light/files/pages/market/orderbook.htm
+
+
+- /resources/lang/en/frontend.json (if you made changes in this file, you have to find differences using online tools and merge new strings, if you don't do it you will lose your changes)
+
+- /resources/lang/tr/frontend.json (if you made changes in this file, you have to find differences using online tools and merge new strings, if you don't do it you will lose your changes)
+
+
+
+2. Open this link https://exbita.com/wp-json/exbita-files/download/REPLACE_THIS_WITH_YOUR_PURCHASE_CODE
+ and download the missing files. 
+
+3. Unzip downloaded files and copy the following files to your project (confirm replacing):
+
+- /app/Helpers/ExchangeHelper.php
+- /app/Console/Commands/AddMissingUserWallets.php
+
+
+2. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+
+npm run production
+

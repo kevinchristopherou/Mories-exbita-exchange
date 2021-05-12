@@ -1,0 +1,20 @@
+Exbita Upgrade Guide 2.0.4
+
+IMPORTANT: Always backup your existing project files and database before upgrading.
+
+If you purchased and downloaded 2.0.4 version already, you can ignore these upgrade steps.
+================================================
+
+1. Replace the following files:
+
+- resources/js/components/admin/AdminNavbar.htm 
+
+2. Add to .env file the following line:
+
+COINPAYMENTS_API_URL="https://www.coinpayments.net/api.php"
+
+3. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+
+php artisan config:cache
+npm run production
+

@@ -1,0 +1,47 @@
+<div>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">{{market.quote_currency}}</span>
+    </div>
+    <money-input :placeholder="$t('market.enter_price')"
+                 v-model="limitSellRate"
+                 :decimals="market.quote_currency_format_decimals"></money-input>
+    <div class="input-group-append dropup">
+      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false" tabindex="-1">
+      </button>
+      <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" v-on:click="limitSellRate=parseFloat(market.last)" tabindex="-1">{{$t('market.last_price')}}</a>
+        <a class="dropdown-item" v-on:click="limitSellRate=parseFloat(market.bid)" tabindex="-1">{{$t('market.bid_price')}}</a>
+        <a class="dropdown-item" v-on:click="limitSellRate=parseFloat(market.ask)" tabindex="-1">{{$t('market.ask_price')}}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">{{market.currency}}</span>
+    </div>
+    <money-input :placeholder="$t('market.enter_amount')"
+                 v-model="limitSellAmount"
+                 :decimals="market.currency_format_decimals"></money-input>
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" v-on:click="limitSellMax" tabindex="-1">
+        <icon name="angle-double-up"></icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="clearfix">
+      <span class="market-approximate-amount" v-if="limitSellAmount > 0 && limitSellRate > 0">
+        {{limitSellCost | round(market.quote_currency_format_decimals)}} {{market.quote_currency}}
+        <icon name="question-circle" class="text-primary" id="limitSellHelpText"></icon>
+        <b-popover target="limitSellHelpText" placement="bottom" triggers="click blur">
+          <div v-html="limitSellHelpText"></div>
+        </b-popover>
+      </span>
+    <button class="btn btn-green float-right" v-on:click="limitSell" v-button-loading="busy">
+      {{ $t('market.place_order')}}
+    </button>
+  </div>
+</div>

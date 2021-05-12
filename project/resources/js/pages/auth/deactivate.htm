@@ -1,0 +1,34 @@
+<main class="inner-container">
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('account_deactivate.title') }}</h3>
+
+  <div class="text-center">
+    <div v-if="status !== 'success'">
+      <p>
+        {{ $t('account_deactivate.warning') }}
+      </p>
+
+      <button class="btn btn-orange btn-big" v-button-loading="busy"
+              v-on:click="deactivate">
+        {{ $t('account_deactivate.deactivate') }}
+      </button>
+    </div>
+
+    <div v-if="status=='failed'" class="text-danger mt-4">
+      <div class="text-center">
+        <icon name="exclamation-circle" scale="4x"></icon>
+      </div>
+      <h3>{{ $t('account_deactivate.failed')}}</h3>
+      <h3> {{ $t(error)}} </h3>
+    </div>
+    <div v-if="status=='success'" class="text-success">
+
+      <icon name="check-circle" scale="4x" color="green"></icon>
+      <h3>{{ $t('account_deactivate.success') }}</h3>
+
+      <router-link :to="{ name: 'home' }">
+        <button class="btn btn-green btn-big">{{ $t('go_home') }}</button>
+      </router-link>
+    </div>
+  </div>
+
+</main>

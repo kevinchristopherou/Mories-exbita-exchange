@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col-12">
+    <h5 class="text-center">{{$t('my_orders.filled_orders')}}</h5>
+    <b-table show-empty
+             stacked="xs"
+             :items="orders.data"
+             :fields="fields"
+             class="table-striped table-bordered table-sm table-responsive-md text-right"
+             :empty-text="$t('my_orders.no_filled_orders')">
+
+      <template v-slot:cell(dateField)="order">
+        <div>
+          {{order.item.created_at | tz_datetime}}
+        </div>
+      </template>
+      <template v-slot:cell(filledDateField)="order">
+        <div>
+          {{order.item.updated_at | tz_datetime}}
+        </div>
+      </template>
+      <template v-slot:cell(marketField)="order">
+        <div>
+          <router-link :to="{ name: 'market.inner',params: {marketName: order.item.market}}">{{ order.item.market }}
+          </router-link>
+        </div>
+      </template>
+      <template v-slot:cell(typeField)="order">
+        <div>
+          <span v-if="order.item.type === 'SELL' || order.item.type === 'SELL_LIMIT'" class="text-danger">
+            <icon name="arrow-down"></icon>
+            {{$t('market.transaction_sell')}}
+          </span>
+          <span v-if="order.item.type === 'BUY' || order.item.type === 'BUY_LIMIT'" class="text-success">
+            <icon name="arrow-up"></icon>
+            {{$t('market.transaction_buy')}}
+          </span>
+        </div>
+      </template>
+      <template v-slot:cell(rateField)="order">
+        <div>
+            <span v-if="order.item.rate > 0">
+              {{order.item.rate | round(market.quote_currency_format_decimals)}} {{market.quote_currency}}
+            </span>
+          <span v-else>
+              {{$t('order.quick_order')}}
+            </span>
+        </div>
+      </template>
+      <template v-slot:cell(rateActualField)="order">
+        <div>
+          {{order.item.rate_actual | round(market.quote_currency_format_decimals)}} {{market.quote_currency}}
+        </div>
+      </template>
+      <template v-slot:cell(amountFilledField)="order">
+        <div>
+          {{order.item.amount_filled | round(order.item.type === 'BUY' ? market.quote_currency_format_decimals : market.currency_format_decimals) }} {{order.item.type === 'BUY' ?
+          market.quote_currency : market.currency}}
+        </div>
+      </template>
+      <template v-slot:cell(HEAD_actions)="order">
+        {{ $t('abort')}}
+      </template>
+    </b-table>
+
+    <b-pagination class="mt-2 pagination-sm"
+                  v-if="orders.meta.last_page > 1"
+                  :total-rows="orders.meta.total"
+                  :per-page="Number(orders.meta.per_page)"
+                  v-model="orders.meta.current_page"
+                  @input="loadOrders"></b-pagination>
+  </div>
+</div>

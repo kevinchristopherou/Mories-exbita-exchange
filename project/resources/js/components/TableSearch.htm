@@ -1,0 +1,44 @@
+<div class="input-group input-group-sm mb-3 float-right">
+  <div class="input-group-prepend">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">{{ $t(searchField.name) }}
+    </button>
+    <div class="dropdown-menu">
+      <a v-for="field in searchFields"
+         class="dropdown-item"
+         @click="setSearchField(field)">
+        {{ $t(field.name) }}
+      </a>
+    </div>
+  </div>
+  <select class="custom-select custom-select-fixed"
+          v-if="searchField.type === 'select'"
+          v-model="selectedOption">
+    <option value="">{{ $t('please_select') }}</option>
+    <option v-for="option in searchField.options" :value="option.value">
+      {{ option.text }}
+    </option>
+  </select>
+  <date-picker v-if="searchField.type === 'date'"
+               ref="searchDatepicker"
+               wrapper-class="input-group-datepicker"
+               v-model="searchDate"
+               :format="datepickerOptions.format"
+               :language="datepickerOptions.language"/>
+  <input class="form-control form-input-fixed-width" type="text"
+         v-if="searchField.type === 'date' || searchField.type === 'text' || searchField.type === 'number'"
+         v-bind:readonly="searchField.type === 'date'"
+         v-model="searchValue"
+         v-on:click="openDatepicker">
+  <div class="input-group-prepend input-group-append">
+    <button class="btn btn-outline-secondary" type="button" @click="search">
+      <icon name="search"></icon>
+    </button>
+  </div>
+  <div class="input-group-prepend">
+    <button class="btn btn-outline-secondary" type="button"
+            @click="clearSearch" v-bind:disabled="this.paramsString === ''">
+      <icon name="eraser"></icon>
+    </button>
+  </div>
+</div>

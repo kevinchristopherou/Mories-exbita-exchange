@@ -1,0 +1,14 @@
+.btn-xs {
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: calc(0.35rem - 1px);
+    line-height: 1;
+}
+
+.btn-xs:not(.btn-danger):not(.btn-warning):not(.btn-success):not(.btn-green) {
+    color: #666;
+}
+
+.btn-xs:not(.btn-danger):not(.btn-warning):not(.btn-success):not(.btn-green):hover {
+    color: #222;
+}

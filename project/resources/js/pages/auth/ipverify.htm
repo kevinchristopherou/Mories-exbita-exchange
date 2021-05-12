@@ -1,0 +1,32 @@
+<main class="inner-container">
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('login_ip_verification') }}</h3>
+
+  <div class="text-center">
+    <div v-if="status=='verifying'">
+      <div>
+        <icon name="spinner" spin scale="4x"></icon>
+      </div>
+      <p>
+        {{ $t('login_ip_verify_verifying')}}
+      </p>
+    </div>
+
+    <div v-if="status=='failed'" class="text-danger">
+
+      <div class="text-center">
+        <icon name="exclamation-circle" scale="4x"></icon>
+      </div>
+      <h3> {{ $t(error)}} </h3>
+    </div>
+    <div v-if="status=='success'" class="text-success">
+      <icon name="check-circle" scale="4x" color="green"></icon>
+      <h3 class="mt-4">{{ ip }}</h3>
+      <h3>{{ $t('login_ip_verify_success') }}</h3>
+
+      <router-link :to="{ name: 'login' }">
+        <button class="btn btn-green">{{ $t('login') }}</button>
+      </router-link>
+    </div>
+  </div>
+
+</main>

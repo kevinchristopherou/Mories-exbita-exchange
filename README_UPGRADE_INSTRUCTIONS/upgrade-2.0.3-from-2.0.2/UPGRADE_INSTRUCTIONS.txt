@@ -1,0 +1,18 @@
+Exbita Upgrade Guide 2.0.3
+
+IMPORTANT: Always backup your existing project files and database before upgrading.
+
+If you purchased and downloaded 2.0.3 version already, you can ignore these upgrade steps.
+================================================
+
+1. Replace the following files:
+
+- resources/themes/dark-light/files/pages/market/orderbook.htm
+- app/Models/Withdraw.php
+- app/Helpers/MoneyHelper.php
+- resources/js/components/admin/AdminNavbar.htm 
+
+2. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+
+npm run production
+

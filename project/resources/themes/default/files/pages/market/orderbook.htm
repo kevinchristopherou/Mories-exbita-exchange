@@ -1,0 +1,121 @@
+<div class="row">
+
+  <!-- MARKET BUY ORDERS -->
+  <div class="col-sm-12 col-md-6">
+    <h5 class="text-center">{{$t('order_book.buy_orders')}}
+      <icon name="arrow-up" class="text-success"></icon>
+    </h5>
+
+    <div class="orderbook-table-container">
+      <table class="table table-sm orderbook-header-table text-right">
+        <tr>
+          <th>{{$t('order_book.sum') + ' [' + market.quote_currency + ']'}}</th>
+          <th>{{$t('order_book.total') + ' [' + market.quote_currency + ']'}}</th>
+          <th>{{$t('order_book.amount') + ' [' + market.currency + ']'}}</th>
+          <th>{{$t('order_book.bid_price') + ' [' + market.quote_currency + ']'}}</th>
+          <th class="orderbook-actions"></th>
+        </tr>
+      </table>
+      <div class="buy-sell-table-container">
+        <table class="table table-striped table-sm table-buy text-right">
+          <tr v-for="order in buyOrders">
+            <td>
+              <div class="qbar" v-bind:style="{ width : getQbarWidthBuy(order.sum) + 'px'}"></div>
+              <span>
+                  {{order.sum | round(market.quote_currency_format_decimals)}}
+                </span>
+            </td>
+            <td>
+                <span>
+                  {{order.total | round(market.quote_currency_format_decimals)}}
+                </span>
+            </td>
+            <td>
+                <span>
+                  {{order.quantity | round(market.currency_format_decimals)}}
+                </span>
+            </td>
+            <td>
+                <span>
+                  {{order.rate | round(market.quote_currency_format_decimals)}}
+                </span>
+            </td>
+            <td class="orderbook-actions">
+              <button class="btn btn-xs" v-if="order.uuids.length > 0"
+                      v-b-tooltip.hover.html
+                      :title="getTableCancelTooltipText(order)"
+                      v-on:click="cancelOrders(order.uuids)">
+                <icon name="times"></icon>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <table class="table table-sm orderbook-footer-table text-right">
+        <tr>
+          <th class="text-left">{{ buyOrdersTotal | round(market.quote_currency_format_decimals) }} {{ market.quote_currency}}</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- MARKET SELL ORDERS -->
+  <div class="col-sm-12 col-md-6">
+    <h5 class="text-center">{{$t('order_book.sell_orders')}}
+      <icon name="arrow-down" class="text-danger"></icon>
+    </h5>
+
+    <div class="orderbook-table-container">
+      <table class="table table-sm orderbook-header-table text-right">
+        <tr>
+          <th class="orderbook-actions"></th>
+          <th>{{$t('order_book.ask_price') + ' [' + market.quote_currency + ']'}}</th>
+          <th>{{$t('order_book.amount') + ' [' + market.currency + ']'}}</th>
+          <th>{{$t('order_book.total') + ' [' + market.quote_currency + ']'}}</th>
+          <th>{{$t('order_book.sum') + ' [' + market.quote_currency + ']'}}</th>
+        </tr>
+      </table>
+      <div class="buy-sell-table-container">
+        <table class="table table-striped table-sm table-sell text-right">
+          <tr v-for="order in sellOrders">
+            <td class="orderbook-actions">
+              <button class="btn btn-xs" v-if="order.uuids.length > 0"
+                      v-b-tooltip.hover.html
+                      :title="getTableCancelTooltipText(order)"
+                      v-on:click="cancelOrders(order.uuids)">
+                <icon name="times"></icon>
+              </button>
+            </td>
+            <td>
+            <span>
+              {{order.rate | round(market.quote_currency_format_decimals)}}
+            </span>
+            </td>
+            <td>
+            <span>
+              {{order.quantity | round(market.currency_format_decimals)}}
+            </span>
+            </td>
+            <td>
+            <span>
+              {{order.total | round(market.quote_currency_format_decimals)}}
+            </span>
+            </td>
+            <td>
+              <div class="qbar" v-bind:style="{ width : getQbarWidthSell(order.sum) + 'px'}"></div>
+              <span>
+              {{order.sum | round(market.quote_currency_format_decimals)}}
+            </span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <table class="table table-sm orderbook-footer-table text-right">
+        <tr>
+          <th class="text-right">{{ sellOrdersTotal | round(quote_currency_format_decimals) }} {{ market.currency}}</th>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+</div>

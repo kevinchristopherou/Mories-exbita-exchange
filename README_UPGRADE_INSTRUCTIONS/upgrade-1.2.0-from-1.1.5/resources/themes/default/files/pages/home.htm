@@ -1,0 +1,43 @@
+<section>
+  <div class="row">
+
+    <div class="col-12">
+      <div class="table-title">
+        {{$t('wallet_balances')}}
+      </div>
+      <table class="table table-sm table-bordered table-hover table-striped table-responsive text-right">
+        <tr>
+          <th>{{$t('topbar_balance.currency')}}</th>
+          <th>{{$t('topbar_balance.available')}}</th>
+          <th>{{$t('topbar_balance.pending')}}</th>
+          <th>{{$t('topbar_balance.withdraw_pending')}}</th>
+          <th colspan="2">{{$t('topbar_balance.total')}}</th>
+        </tr>
+        <tr v-if="fiatWallet">
+          <td>{{ fiat_symbol}}</td>
+          <td>{{ fiatWallet.available| round(2) }}</td>
+          <td>{{ fiatWallet.pending| round(2) }}</td>
+          <td>{{ fiatWallet.withdraw_pending| round(2) }}</td>
+          <td colspan="2">{{ fiatWallet.fiatBalance | round(2) }} {{fiat_symbol}}</td>
+        </tr>
+
+        <tr v-for="wallet in wallets">
+          <td>
+            {{ wallet.symbol}}
+          </td>
+          <td>{{ wallet.available | round(8) }}</td>
+          <td>{{ wallet.pending | round(8) }}</td>
+          <td>{{ wallet.withdraw_pending | round(8) }}</td>
+          <td>{{ wallet.total | round(8) }} {{ wallet.symbol}}</td>
+          <td>{{ wallet.fiatBalance | round(2) }} {{fiat_symbol}}</td>
+        </tr>
+
+      </table>
+    </div>
+
+    <div class="col-12">
+      <open-orders></open-orders>
+    </div>
+
+  </div>
+</section>

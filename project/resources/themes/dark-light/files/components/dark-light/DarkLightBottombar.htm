@@ -1,0 +1,72 @@
+<footer>
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-12 col-md-auto order-md-2">
+                <div class="social-media-links">
+                    <a :href="sitesettings.SOCIAL_FACEBOOK_URL.value ? sitesettings.SOCIAL_FACEBOOK_URL.value : 'http://www.facebook.com'">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="fill-svg" d="M8.00047 1.33468C4.31914 1.33468 1.33447 4.31935 1.33447 8.00068C1.33447 11.3273 3.77181 14.0847 6.95914 14.5867V9.92802H5.26581V8.00068H6.95914V6.53202C6.95914 4.86002 7.95447 3.93802 9.47647 3.93802C10.2058 3.93802 10.9698 4.06802 10.9698 4.06802V5.70735H10.1271C9.30047 5.70735 9.04181 6.22202 9.04181 6.74935V7.99935H10.8891L10.5938 9.92668H9.04181V14.5853C12.2291 14.086 14.6665 11.328 14.6665 8.00068C14.6665 4.31935 11.6818 1.33468 8.00047 1.33468Z" />
+                        </svg>
+                        Facebook
+                    </a>
+                    <a :href="sitesettings.SOCIAL_TWITTER_URL.value ? sitesettings.SOCIAL_TWITTER_URL.value : 'http://www.twitter.com'">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path class="fill-svg" d="M13.0888 5.33132C13.0975 5.44798 13.0975 5.56398 13.0975 5.67998C13.0975 9.22998 10.3955 13.3207 5.4575 13.3207C3.93616 13.3207 2.52283 12.88 1.3335 12.1146C1.5495 12.1393 1.7575 12.148 1.98216 12.148C3.2375 12.148 4.39283 11.724 5.31616 11.0006C4.1355 10.976 3.14616 10.2026 2.80483 9.13865C2.97083 9.16332 3.1375 9.17998 3.31216 9.17998C3.55283 9.17998 3.79483 9.14665 4.0195 9.08865C2.78816 8.83932 1.86616 7.75865 1.86616 6.45332V6.41998C2.22416 6.61932 2.6395 6.74398 3.0795 6.76065C2.35616 6.27932 1.88216 5.45598 1.88216 4.52465C1.88216 4.02598 2.01483 3.56865 2.2475 3.16998C3.5695 4.79865 5.55683 5.86332 7.78483 5.97998C7.7435 5.77998 7.71816 5.57265 7.71816 5.36465C7.71816 3.88465 8.9155 2.67932 10.4035 2.67932C11.1768 2.67932 11.8748 3.00332 12.3655 3.52732C12.9722 3.41065 13.5535 3.18598 14.0695 2.87865C13.8702 3.50198 13.4455 4.02598 12.8888 4.35865C13.4295 4.29998 13.9535 4.15065 14.4348 3.94265C14.0695 4.47465 13.6128 4.94865 13.0888 5.33132Z" />
+                        </svg>
+                        Twitter
+                    </a>
+                </div>
+            </div>
+            <div class="col-12 col-md order-md-1">
+                <ul>
+                    <li>
+                        <router-link :to="{name: 'about'}">
+                        {{ $t('about_us')}}
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name: 'cookies'}">
+                            {{ $t('cookies')}}
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name: 'fees'}">
+                        {{ $t('fees')}}
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name: 'support'}">
+                        {{ $t('support')}}
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name: 'privacy'}">
+                        {{ $t('privacy')}}
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name: 'apidocs'}">
+                        {{$t('api_documentation')}}
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name: 'terms'}">
+                        {{$t('terms_of_use')}}
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{name: 'contact'}">
+                        {{ $t('contact_us')}}
+                        </router-link>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-md-auto order-md-0 ml-4 brand-bottom-bar">
+                <router-link class="footer-logo" :to="{name: 'welcome'}">
+                    <div v-if="sitesettings.SITE_NAME.value"><span class="text-400">{{ sitesettings.SITE_NAME.value }}</span></div>
+                    <div v-if="!sitesettings.SITE_NAME.value">EX<span class="text-400">BITA</span></div>
+                </router-link>
+            </div>
+        </div>
+    </div>
+</footer>

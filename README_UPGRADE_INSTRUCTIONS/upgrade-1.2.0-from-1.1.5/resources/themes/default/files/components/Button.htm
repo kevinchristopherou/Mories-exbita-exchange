@@ -1,0 +1,9 @@
+<button :type="nativeType" :disabled="loading" class="btn" :class="{
+    [`btn-${type}`]: true,
+    'btn-block': block,
+    'btn-big': big,
+    'btn-loading': loading
+  }">
+  <icon name="spinner" spin v-if="loading"></icon>
+  <slot></slot>
+</button>

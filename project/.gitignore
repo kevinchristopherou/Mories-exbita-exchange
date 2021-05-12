@@ -1,0 +1,4 @@
+/.idea
+/storage/*.key
+node_modules
+vendor

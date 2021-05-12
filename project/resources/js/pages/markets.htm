@@ -1,0 +1,43 @@
+<div>
+  <div class="panel">
+    <div id="toolbar">
+      <h3>{{ $t('market.markets') }}</h3>
+    </div>
+    <table class="table table-responsive-md text-right table-v2">
+      <thead>
+      <tr>
+        <th>{{ $t('market.market') }}</th>
+        <th>{{ $t('market.currency') }}</th>
+        <th>{{ $t('market.current_price') }}</th>
+        <th>{{ $t('market.volume_24h') }}</th>
+        <th>{{ $t('market.highest_24h') }}</th>
+        <th>{{ $t('market.lowest_24h') }}</th>
+        <th>{{ $t('market.change_24h') }}</th>
+        <th>{{ $t('market.buy_sell') }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="market in markets">
+        <td>
+          <router-link :to="{ name: 'market.inner',params: {marketName: market.name}}">{{ market.name }}
+          </router-link>
+        </td>
+        <td>{{ market.currency_name }}</td>
+        <td class="text-right">{{ market.bid | round(market.quote_currency_format_decimals) }} {{market.quote_currency}}</td>
+        <td class="text-right">{{ market.volume_24h | round(market.currency_format_decimals) }} {{market.currency}}</td>
+        <td class="text-right">{{ market.high_24h | round(market.quote_currency_format_decimals) }}</td>
+        <td class="text-right">{{ market.low_24h | round(market.quote_currency_format_decimals) }}</td>
+        <td class="text-right">{{ market.change_24h | round(market.quote_currency_format_decimals) }}</td>
+        <td>
+          <router-link tag="button" type="button" class="btn btn-green btn-sm"
+                       :to="{ name: 'market.inner',params: {marketName: market.name}}">
+            {{ $t('market.buy_sell') }}
+          </router-link>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      </tfoot>
+    </table>
+  </div>
+</div>

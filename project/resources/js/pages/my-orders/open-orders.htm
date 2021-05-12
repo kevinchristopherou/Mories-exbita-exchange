@@ -1,0 +1,99 @@
+<div class="row">
+  <div class="col-12">
+
+    <div class="table-title">
+      {{$t('my_orders.open_orders')}}
+    </div>
+
+    <div class="table-filter">
+      {{ $t('market.select_market')}}:
+      <button class="ml-2 btn btn-sm btn-outline dropdown-toggle" type="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+        {{ marketName ? marketName : $t('please_select')}}
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item"
+           @click="marketName = null">
+          {{ $t('all') }}
+        </a>
+        <a v-for="market in markets"
+           class="dropdown-item"
+           @click="marketName = market.name">
+          {{ market.name }}
+        </a>
+      </div>
+    </div>
+
+    <b-table show-empty
+             stacked="xs"
+             :items="myorders"
+             :fields="fields"
+             :current-page="currentPage"
+             class="table table-responsive-md text-right table-v2"
+             :empty-text="$t('order_book.no_open_orders')"
+             :per-page="perPage">
+
+      <template v-slot:cell(dateField)="order">
+        <div>
+          {{order.item.created_at | tz_datetime}}
+        </div>
+      </template>
+      <template v-slot:cell(marketField)="order">
+        <div>
+          <router-link :to="{ name: 'market.inner',params: {marketName: order.item.market}}">{{ order.item.market }}
+          </router-link>
+        </div>
+      </template>
+      <template v-slot:cell(typeField)="order">
+        <div>
+            <span v-if="order.item.type === 'SELL_LIMIT'" class="text-danger">
+            <icon name="arrow-down"></icon>
+            {{$t('market.transaction_sell')}}
+            </span>
+          <span v-if="order.item.type === 'BUY_LIMIT'" class="text-success">
+            <icon name="arrow-up"></icon>
+            {{$t('market.transaction_buy')}}
+            </span>
+        </div>
+      </template>
+      <template v-slot:cell(rateField)="order">
+        <div>
+          {{order.item.rate | round(getOrderMarketQuoteCurrencyDecimals(order.item))}} {{getOrderMarketQuoteCurrency(order.item)}}
+        </div>
+      </template>
+      <template v-slot:cell(quantityField)="order">
+        <div>
+          {{order.item.quantity | round(getOrderMarketCurrencyDecimals(order.item))}} {{getOrderMarketCurrency(order.item)}}
+        </div>
+      </template>
+      <template v-slot:cell(quantityRemainingField)="order">
+        <div>
+          {{order.item.quantity_remaining | round(getOrderMarketCurrencyDecimals(order.item))}} {{getOrderMarketCurrency(order.item)}}
+        </div>
+      </template>
+      <template v-slot:cell(totalField)="order">
+        <div>
+          {{order.item.quantity * order.item.rate | round(getOrderMarketQuoteCurrencyDecimals(order.item))}} {{getOrderMarketQuoteCurrency(order.item)}}
+        </div>
+      </template>
+      <template v-slot:cell(HEAD_actions)="order">
+        {{ $t('cancel')}}
+      </template>
+      <template v-slot:cell(actions)="order">
+        <div class="text-center">
+          <button class="btn btn-xs"
+                  v-b-tooltip.hover.html
+                  :title="getCancelTooltipText(order.item)"
+                  v-on:click="cancelOrder(order.item)">
+            <icon name="times"></icon>
+          </button>
+        </div>
+      </template>
+    </b-table>
+
+    <b-pagination class="mt-2 pagination-sm"
+                  v-if="myorders.length > perPage"
+                  :total-rows="myorders.length"
+                  :per-page="perPage" v-model="currentPage"></b-pagination>
+  </div>
+</div>

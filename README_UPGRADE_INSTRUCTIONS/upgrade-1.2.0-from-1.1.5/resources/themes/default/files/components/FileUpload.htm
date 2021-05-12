@@ -1,0 +1,54 @@
+<div class="my-2">
+  <!-- Actual file input, which is hidden in ui -->
+  <input type="file"
+         v-on:change="onFileChange"
+         v-bind:accept="accept"
+         ref="input" class="form-control input-hidden">
+
+  <div class="text-left mb-2" v-if="helpText">
+    <small>{{helpText}}.
+      <a v-if="examplePhoto" :href="examplePhoto" target="_blank">
+        {{ $t('idv_example_photo')}}
+      </a>
+    </small>
+  </div>
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <button class="btn btn-outline-secondary" type="button" v-on:click="clear">
+        <icon name="remove"></icon>
+      </button>
+    </div>
+    <input type="text" class="form-control"
+           readonly ref="filename"
+           :placeholder="$t('file_upload_click_to_select')"
+           v-on:click="triggerSelect">
+  </div>
+  <div>
+    <small v-if="!uploadInProgress && !uploadComplete">
+      {{$t('file_upload_click_to_upload',{max_size: getFileSizeReadable(maxSize), max_resoltion: resolution})}}
+    </small>
+    <br>
+    <small v-if="uploadFailed" class="text-danger">
+      {{$t('file_upload_upload_failed')}}
+      <span v-for="error in validationErrors" class="display-block">{{error}}</span>
+    </small>
+    <small v-if="uploadComplete" class="text-success">
+      {{$t('file_upload_upload_complete')}}
+    </small>
+    <div v-if="uploadInProgress">
+      <small class="text-primary">
+        {{$t('file_upload_upload_in_progress')}}
+      </small>
+      <div class="progress">
+        <div class="progress-bar" v-bind:style=" {width: progress + '%'}">
+          {{ progress }}%
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-xs-12 mt-2" v-if="imagePreview && validationErrors.length == 0">
+    <img :src="image" class="img-responsive img-file-upload">
+  </div>
+</div>

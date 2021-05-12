@@ -1,0 +1,38 @@
+<section class="header-top clearfix">
+  <div class="header-top-left">
+    <ul class="header-currency-ul">
+      <router-link tag="li"
+                   :to="{ name: 'market.inner',params: {marketName: market.name}}"
+                   class="header-currency-li slideItem pointer topbar-market"
+                   v-for="market in topMarkets"
+                   :key="market.name">
+        <strong class="color-blue">{{market.name}}:</strong>{{market.last | round(market.quote_currency_format_decimals)}} {{ market.quote_currency }}
+        <span :class="getChangeColorClass(market.change_24h_percent)">%{{market.change_24h_percent | round(2)}}</span>
+      </router-link>
+    </ul>
+  </div>
+  <div class="header-top-right">
+    <div class="header-top-right-right">
+      <ul class="clearfix">
+        <li v-if="user">
+          <router-link tag="a" class="btn btn-green" :to="{ name: 'wallets'}">
+            {{ $t('wallet.title') }}
+          </router-link>
+        </li>
+
+        <li class="dropdown">
+          <a class="topbar-language-dropdown" data-toggle="dropdown">
+            <icon name="language"></icon>&nbsp;&nbsp; {{getLocale}}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right language">
+            <ul class="dropdown-ul">
+              <li v-for="locale in locales">
+                <a href="#" v-on:click.prevent="setLocale({locale:locale.locale})">{{ locale.name }}</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

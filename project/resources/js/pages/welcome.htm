@@ -1,0 +1,61 @@
+<div id="welcome-container">
+    <header id="header" class="">
+        <div class="container">
+            <nav id="welcome-navbar" class="navbar navbar-expand-md navbar-light clearfix">
+                <router-link class="navbar-brand text-uppercase" :to="{ name: 'welcome'}"
+                             v-if="sitesettings.SITE_LOGO.file_url === null">
+                    {{ sitesettings.SITE_NAME.value }}
+                </router-link>
+                <router-link v-if="sitesettings.SITE_LOGO.file_url" class="navbar-image"
+                             tag="div"
+                             :to="{ name: 'home'}">
+                    <span class="helper"></span>
+                    <img :src="sitesettings.SITE_LOGO.file_url" height="50"
+                         :class="{'invert-fixed': sitesettings.SITE_LOGO_INVERT.value == 1}">
+                </router-link>
+                <nav-mobile></nav-mobile>
+                <nav-desktop></nav-desktop>
+            </nav>
+        </div>
+    </header>
+    <section id="particles-js" class="main-slider">
+        <div class="chart">
+            <div class="slider-bg">
+                <div class="container">
+                    <div class="slider-text">
+                        <h1>{{$t('new_home_page.header_title')}}</h1>
+                        <p>{{$t('new_home_page.header_description')}}</p>
+                        <router-link :to="{name:'markets'}">{{$t('new_home_page.header_btn')}}</router-link>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <section v-if="markets.length > 0" class="coin-price">
+        <div class="container">
+            <div class="row no-gutters">
+                <div v-for="market in markets.slice(0, 4)" class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                    <div class="coin-price-block">
+                        <h5 class="d-flex justify-content-between">
+                            <div class="currency">{{ market.currency_name }}</div>
+                            <i v-bind:class="'cc-icon cc ' + market.currency"></i>
+                        </h5>
+                        <div class="usdt">
+                            {{ market.last}} {{ market.quote_currency }}
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div :class="getChangeColorClass(market.change_24h_percent)">
+                                {{market.change_24h_percent| round(2)}}%
+                            </div>
+                            <div class="usdt-gray">{{ market.volume_24h }} {{ market.currency }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <features></features>
+    <market></market>
+    <welcome-footer></welcome-footer>
+</div>

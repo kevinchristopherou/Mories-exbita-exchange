@@ -1,0 +1,8 @@
+.toasted.primary.success .action,
+.toasted.primary.error .action {
+  color: #EEEEEE !important;
+}
+
+.toasted.primary {
+  padding: 0.5rem 1rem !important;
+}

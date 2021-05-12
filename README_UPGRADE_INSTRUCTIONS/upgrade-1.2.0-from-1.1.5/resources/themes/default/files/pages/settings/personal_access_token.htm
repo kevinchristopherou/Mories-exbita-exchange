@@ -1,0 +1,88 @@
+<main class="whitebox text-center">
+
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('token.personal_access_tokens') }}</h3>
+
+  <div>
+    <div id="personal_access_token_form_dummy" class="input-hidden" >
+      <input name="token_name" class="swal2-input" :placeholder="$t('token.key_name')">
+      <h5>{{$t('token.select_scopes')}}</h5>
+      <div class="form-group text-left mb-4">
+        <div class="form-control mb-2">
+          <input checked disabled type="checkbox" name="token_disabled"/>
+          <strong class="pl-2">{{$t('token.scope_types.read_only')}}</strong>
+        </div>
+        <div class="form-control mb-2" v-for="scope in scopes">
+          <input type="checkbox" name="token_scopes" :value="scope.id"/>
+          <span class="pl-2">
+            <strong>{{$t(scope.description)}}</strong>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOKEN SUCCESS MODAL -->
+    <b-modal id="tokenSuccessModal"
+             ref="tokenSuccessModal" ok-only
+             footer-class="modal-footer-ok-only-block"
+             :title="$t('token.success_message')"
+             :ok-title="$t('token.close_message')">
+      <p>{{$t('token.warning_message')}}</p>
+      <textarea v-model="accessToken" rows="5" class="form-control" id="personal_access_token_new_token"></textarea>
+      <button class="btn btn-green btn-block my-2" v-on:click="copyToken">{{$t('token.copy_token')}}</button>
+    </b-modal>
+
+    <div>
+      <div class="panel panel-default">
+
+        <div class="panel-heading m-5">
+          <button class="btn btn-success" @click="showCreateTokenForm" v-button-loading="busy">
+            {{ $t('token.create_token')}}
+          </button>
+        </div>
+
+        <p class="m-b-none" v-if="tokens.length === 0">
+          {{ $t('token.empty_message')}}
+        </p>
+
+        <table class="table table-sm table-bordered table-hover table-striped" v-if="tokens.length > 0">
+          <thead>
+          <tr>
+            <th>{{ $t('token.key_name')}}</th>
+            <th>{{ $t('token.created_date')}}</th>
+            <th>{{ $t('token.expires_date')}}</th>
+            <th>{{ $t('token.scopes')}}</th>
+            <th>{{ $t('token.action')}}</th>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr v-for="token in tokens">
+            <td>
+              <div :title="token.name">
+                {{ token.name | truncateToken }}
+              </div>
+            </td>
+            <td>{{ token.created_at }}</td>
+            <td>{{ token.expires_at }}</td>
+            <td>
+              <ul>
+                <li>
+                  <span>{{ $t('token.scope_types.read_only') }}</span>
+                </li>
+                <li v-for="scope in token.scopes">
+                  <span>{{$t('token.scope_types.' + scope)}} </span>
+                </li>
+              </ul>
+            </td>
+            <td class="settings-row">
+              <button class="btn btn-danger" @click="revokeConfirm(token)">
+                {{ $t('token.revoke') }}
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>

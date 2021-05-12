@@ -1,0 +1,45 @@
+<div>
+<main class="whitebox">
+    <h3 class="title-h3 color-dark-blue text-center">{{ $t('referral.title') }}</h3>
+
+    <h5 class="mb-3">{{$t('referral.link')}}:</h5>
+    <span class="label label-success"></span>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-6">
+                <input readonly id="refcode" type="text" name="text" class="form-control input-lg" :value="refcode">
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-green" v-on:click="copyCode">{{$t('referral.copy')}}</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <h5 class="mb-3">{{$t('referral.field')}}: <span class="badge badge-success">{{ plainRef }}</span></h5>
+                <h5 class="mb-3">{{$t('referral.quantity')}}: <span class="badge badge-success">{{ referrals.referrals }}</span></h5>
+                <h5 class="mb-3">{{$t('referral.earning_percentage')}}: <span class="badge badge-success">{{ referrals.earning_percentage }} %</span></h5>
+            </div>
+        </div>
+
+    </div>
+</main>
+<main class="whitebox mt-5">
+    <h3 class="title-h3 mt-3 color-dark-blue text-center">{{ $t('referral.earnings') }}</h3>
+    <table class="table table-sm table-bordered table-hover table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th>{{ $t('deposit_amount') }}</th>
+            <th>{{ $t('deposit_date') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="earning in earnings.data">
+            <td>{{ earning.amount }} {{ earning.currency }}</td>
+            <td>{{ earning.date | tz_datetime }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <laravel-pagination :dataset="earnings" @change="getEarnings"></laravel-pagination>
+</main>
+</div>

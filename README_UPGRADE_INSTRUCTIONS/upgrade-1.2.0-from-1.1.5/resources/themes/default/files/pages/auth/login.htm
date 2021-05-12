@@ -1,0 +1,49 @@
+<main class="inner-container">
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('member_login')}}</h3>
+  <form @submit.prevent="login" @keydown="form.onKeydown($event)">
+
+    <div class="form-group has-error">
+      <label class="control-label" v-if="error">{{ $t(error)}}</label>
+      <div v-if="error && (error == 'login_account_inactive')">{{ $t('account_resend_verification_first') }} <a class="text-green cursor-pointer" v-if="!sendingVerfication" @click="resendVerification()">{{ $t('account_resend_verification_second') }}</a><a v-if="sendingVerfication">Please wait ...</a></div>
+      <p v-if="verficationComplete"><small><a class="text-green">Verification mail has been sent</a></small></p>
+      <p v-if="verficationFailed"><small><a class="text-red">A verification mail has already been sent, please wait some minutes before retrying</a></small></p>
+    </div>
+
+    <div class="form-group" :class="{ 'has-error': form.errors.has('email') }">
+      <input v-model="form.email" class="form-control input-lg" :placeholder="$t('email')" type="text">
+      <has-error :form="form" field="email"></has-error>
+    </div>
+
+    <div class="form-group" :class="{ 'has-error': form.errors.has('password') }">
+      <input v-model="form.password" class="form-control input-lg" :placeholder="$t('password')" type="password">
+      <has-error :form="form" field="password"></has-error>
+    </div>
+
+    <re-captcha :error="recaptchaError" :form="form"
+                v-if="showRecaptcha"
+                v-on:setRecaptchaResponse="setRecaptchaResponse"/>
+
+    <div class="form-terms-check clearfix">
+      <div class="pull-left">
+        <label class="text-600">
+          <input class="magic-checkbox" type="checkbox" id="input_remember_me" v-model="remember">
+          <label class="pull-left" for="input_remember_me"></label>
+          {{ $t('remember_me') }}
+        </label>
+      </div>
+      <div class="pull-right">
+        <router-link :to="{ name: 'password.request' }" class="forgot-password">
+          {{ $t('forgot_password') }}
+        </router-link>
+      </div>
+    </div>
+    <div class="form-group text-center">
+      <button type="submit" class="btn btn-orange btn-big" v-button-loading="form.busy">
+        {{ $t('login') }}
+      </button>
+    </div>
+  </form>
+  <div class="form-footer">{{ $t('dont_have_an_account') }}
+    <router-link :to="'register'">{{$t('sign_up')}}</router-link>
+  </div>
+</main>

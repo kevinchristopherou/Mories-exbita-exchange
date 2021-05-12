@@ -1,0 +1,190 @@
+<main class="whitebox">
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('withdraw.title') }}</h3>
+
+  <div v-show="isWaiting">
+    <div class="mt-4 text-center">
+      <icon name="check-circle" class="text-success" scale="4x"></icon>
+      <h4>
+        {{ $t('withdraw.waiting_for_approval') }}
+      </h4>
+    </div>
+
+    <div class="mt-4 text-center" v-if="showRemember">
+      <p>{{$t('withdraw.remember_this_bank_account')}}</p>
+
+      <div class="form-group">
+        <input v-model="rememberName" class="form-control" :placeholder="$t('withdraw.remember_name_placeholder')"/>
+      </div>
+      <button @click="remember" class="btn btn-success " type="button" v-button-loading="busy">
+        {{ $t('confirm_action_yes') }}, {{ $t('save') }}
+      </button>
+      <button @click="dontRemember" class="btn btn-orange" type="button" v-button-loading="busy">
+        {{ $t('no_thanks') }}
+      </button>
+    </div>
+
+    <div class="mt-2 text-center">
+      <button @click="refreshWithdrawal" class="btn btn-success" type="button">
+        {{ $t('withdraw.create_new_withdrawal') }}
+      </button>
+    </div>
+  </div>
+
+  <div v-show="!isWaiting">
+
+    <form v-on:submit.prevent v-on:keyup.enter="confirmCheck()">
+      <div class="row">
+        <div class="col-xs-12 col-md-6">
+          <!-- Currency -->
+          <div class="form-group">
+            <label>{{ $t('withdraw.currency') }}</label>
+            <select size="1" name="currency" class="form-control"
+                    v-model="form.currency" :placeholder="$t('withdraw.currency')"
+                    v-on:change="setCurrencyAmount" :class="{ 'is-invalid': form.errors.has('currency') }">
+              <option v-bind:value="0">{{ $t('withdraw.currency') }}</option>
+              <option v-for="(fiat,index) in fiatWallets" v-bind:value="fiat.fiat_currency_id">{{ fiat.currency }} ({{
+                fiat.available }})
+              </option>
+            </select>
+            <has-error :form="form" field="currency"></has-error>
+          </div>
+
+          <!-- Amount -->
+          <div class="form-group">
+            <label>{{ $t('withdraw.amount') }}</label>
+            <input class="form-control" type="number" step="0.01" name="amount"
+                   v-model.number="form.amount" :placeholder="$t('withdraw.amount')"
+                   v-on:change="formChange"
+                   :class="{ 'is-invalid': form.errors.has('amount') }">
+            <has-error :form="form" field="amount"></has-error>
+          </div>
+
+          <!-- Bank Name -->
+          <div class="form-group">
+            <label>{{ $t('withdraw.bank_name') }}</label>
+            <input class="form-control" type="text" name="bank_name"
+                   v-model.number="form.bank_name" :placeholder="$t('withdraw.bank_name')"
+                   v-on:change="formChange"
+                   :class="{ 'is-invalid': form.errors.has('bank_name') }">
+            <has-error :form="form" field="bank_name"></has-error>
+          </div>
+        </div>
+        <div class="col-xs-12 col-md-6">
+          <!-- Swift Code -->
+          <div class="form-group">
+            <label>{{ $t('withdraw.swift_code') }}</label>
+            <input class="form-control" type="text" name="swift_code"
+                   v-model.number="form.swift_code" :placeholder="$t('withdraw.swift_code')"
+                   v-on:change="formChange"
+                   :class="{ 'is-invalid': form.errors.has('swift_code') }">
+            <has-error :form="form" field="swift_code"></has-error>
+          </div>
+
+          <!-- IBAN -->
+          <div class="form-group">
+            <label>{{ $t('withdraw.iban') }}</label>
+            <input class="form-control" type="text" name="iban"
+                   v-model="form.iban" :placeholder="$t('withdraw.iban')"
+                   v-on:change="formChange"
+                   :class="{ 'is-invalid': form.errors.has('iban') }">
+            <has-error :form="form" field="iban"></has-error>
+          </div>
+          <!-- IBAN -->
+          <div class="form-group">
+            <label>{{ $t('withdraw.recipient') }}</label>
+            <input class="form-control" type="text" v-model="form.recipient" name="recipient" :placeholder="$t('withdraw.recipient')">
+          </div>
+        </div>
+      </div>
+
+      <div v-if="twoFaMethod" class="text-center">
+
+        <h3 class="title-h3 color-dark-blue text-center">{{ $t('two_factor_auth') }}</h3>
+        <two-fa-verify-form
+            ref="twoFa"
+            :verify-error="verifyError"
+            :show-logout="false"
+            :method="twoFaMethod"
+            :button-hide="true"
+            :setOtp="form.otp"
+            smsTrigger="manual"
+            v-on:otpchange="prepareOtp">
+        </two-fa-verify-form>
+
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-group text-center mt-2">
+        <button @click="confirmCheck()"
+                class="btn btn-success" type="button"
+                v-button-loading="busy">
+          {{ $t('withdraw.submit') }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div v-if="rememberedAccountsByCurrency(form.currency).length > 0">
+
+    <h3 class="title-h3 mt-5 color-dark-blue text-center">{{ $t('withdraw.remembered_accounts') }}</h3>
+    <table class="table table-sm table-bordered table-hover table-striped table-responsive-md">
+      <tr>
+        <th>{{$t('withdraw.remember_name')}}</th>
+        <th>{{$t('withdraw.bank_name')}}</th>
+        <th>{{$t('withdraw.iban')}}</th>
+        <th>{{$t('withdraw.swift_code')}}</th>
+        <th>{{$t('actions')}}</th>
+      </tr>
+      <tr v-for="account in rememberedAccounts">
+        <td>{{account.remember_name}}</td>
+        <td>{{account.bank_name}}</td>
+        <td>{{account.iban}}</td>
+        <td>{{account.swift_code}}</td>
+        <td>
+          <button class="btn btn-sm btn-green" v-on:click="useRememberedAcount(account)">
+            {{$t('withdraw.use_this_account')}}
+          </button>
+          <button class="btn btn-sm btn-orange" v-on:click="deleteRememberedAcount(account)" v-button-loading="busy">
+            {{$t('delete')}}
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div v-if="withdrawals.data.length > 0">
+    <h3 class="title-h3 mt-5 color-dark-blue text-center">{{ $t('withdraw.history') }}</h3>
+
+    <table class="table table-sm table-bordered table-hover table-striped table-responsive-md">
+      <thead>
+      <tr>
+        <!--<th>{{ $t('id') }}</th>-->
+        <th>{{ $t('withdraw.amount') }}</th>
+        <th>{{ $t('withdraw.bank_name') }}</th>
+        <th>{{ $t('withdraw.recipient') }}</th>
+        <th>{{ $t('withdraw.iban') }}</th>
+        <th>{{ $t('date') }}</th>
+        <th>{{ $t('withdraw.status') }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="withdraw in withdrawals.data">
+        <!--<td>{{ withdraw.id }}</td>-->
+        <td>{{ withdraw.amount }} {{ withdraw.currency }}</td>
+        <td>{{ withdraw.bank_name }}</td>
+        <td>{{ withdraw.recipient }}</td>
+        <td>{{ withdraw.iban }}</td>
+        <td>{{ withdraw.created_at | tz_datetime }}</td>
+        <td>
+          <span v-if="withdraw.status == 'waiting'" class="badge badge-warning">{{ $t('pending')}}</span>
+          <span v-if="withdraw.status == 'approved'" class="badge badge-success">{{ $t('approved')}}</span>
+          <span v-if="withdraw.status == 'rejected'" class="badge badge-danger"
+                v-b-tooltip.hover.click :title="getNote(withdraw)">{{ $t('rejected')}}</span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <laravel-pagination :dataset="withdrawals" @change="loadData"></laravel-pagination>
+  </div>
+</main>

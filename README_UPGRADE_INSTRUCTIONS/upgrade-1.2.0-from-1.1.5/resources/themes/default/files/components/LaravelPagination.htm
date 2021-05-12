@@ -1,0 +1,6 @@
+<b-pagination class="mt-2 pagination-sm"
+              v-if="dataset !== null && dataset.meta.last_page > 1"
+              :total-rows="dataset.meta.total"
+              :per-page="Number(dataset.meta.per_page)"
+              v-model="dataset.meta.current_page"
+              @change="onInput"></b-pagination>

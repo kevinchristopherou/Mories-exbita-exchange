@@ -1,0 +1,135 @@
+<main class="whitebox" v-if="user">
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('two_factor_auth') }}</h3>
+
+  <!--CANCEL 2FA-->
+  <div v-if="user.two_fa_enabled" class="text-center">
+
+    <div class="mb-4">
+      <div v-if="user.two_fa_method=='ga'">
+        {{ $t('two_factor_auth_enabled_ga') }}
+      </div>
+
+      <div v-if="user.two_fa_method=='sms'">
+        {{ $t('two_factor_auth_enabled_sms') }}
+      </div>
+    </div>
+
+    <button class="btn btn-orange btn-big"
+            v-on:click="cancelBegin" v-if="cancelState==='none'">
+      {{ $t('two_fa_setup_cancel') }}
+    </button>
+
+    <div class="mt-4" v-if="cancelState==='verify'">
+      <h4 class="mb-4">{{ $t('two_fa_setup_cancel_title') }}</h4>
+
+      <p>{{ $t('two_fa_setup_cancel_message')}}</p>
+
+      <two-fa-verify-form
+          :verify-error="verifyError"
+          :button-label="'verify'"
+          :show-abort="true"
+          :method="user.two_fa_method"
+          v-on:verify="cancelVerify"
+          v-on:abort="reset">
+      </two-fa-verify-form>
+
+    </div>
+
+    <div v-if="cancelState==='canceled'">
+      <button class="btn btn-success btn-big" v-on:click="">{{ $t('two_fa_setup_cancel') }}</button>
+    </div>
+  </div>
+
+  <!--SETUP 2FA-->
+  <div v-else class="text-center">
+
+    <!--SELECT METHOD-->
+    <div v-if="method===null">
+      <h3 class="text-light-grey">
+        {{ $t('two_fa_setup_select_method')}}
+      </h3>
+      <br>
+      <br>
+      <div>
+        <button class="btn btn-green btn-big" v-on:click="setupBegin('ga')">Google Authenticator
+        </button>
+        <button class="btn btn-green btn-big" v-on:click="setupBegin('sms')">SMS</button>
+      </div>
+    </div>
+
+    <!--SETUP GA-->
+    <div v-if="method=='ga'">
+
+      <div v-if="gaSetupData != null">
+
+        <h3>Google Authenticator</h3>
+        <img v-bind:src="gaSetupData.imageurl" height="200" width="200"/>
+
+        <br><br>
+        {{ $t('two_fa_setup_ga_secret_key') }}: {{ gaSetupData.secret }}
+        <br><br>
+        {{ $t('two_fa_setup_ga_make_sure_saved') }}
+        <br><br>
+        {{ $t('two_fa_setup_ga_install_app') }}
+        <br><br>
+        {{ $t('two_fa_setup_ga_enter_password') }}
+        <br><br>
+      </div>
+      <two-fa-verify-form
+          :verify-error="verifyError"
+          :method="method"
+          :show-abort="true"
+          :button-label="'enable'"
+          :busy="busy"
+          v-on:abort="reset"
+          v-on:verify="setupVerify">
+      </two-fa-verify-form>
+    </div>
+
+    <!--SETUP SMS-->
+    <div v-if="method=='sms'">
+
+      <h3>SMS</h3>
+
+      <div v-if="smsSetupState === 'none'">
+        <div class="form-group">
+          <input type="text" name="otp" class="form-control input-lg"
+                 v-model="phone" :placeholder="$t('mobile_phone_number')"
+                 v-bind:class="{'is-invalid' : smsRequestError}"
+                 v-b-tooltip.focus :title="$t('mobile_phone_number_help')">
+          <span class="has-error" v-if="smsRequestError">
+              <label class="control-label">
+                {{ $t(smsRequestError)}}
+              </label>
+            </span>
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-green btn-big" v-on:click="setupSms" v-button-loading="busy">
+              <span>
+                {{ $t('send_verification_code') }}
+              </span>
+          </button>
+
+          <button class="btn btn-orange btn-big" v-on:click="reset">
+            {{ $t('abort') }}
+          </button>
+
+        </div>
+      </div>
+
+
+      <two-fa-verify-form v-if="smsSetupState==='phoneSet'"
+                          :verify-error="verifyError"
+                          :button-label="'enable'"
+                          :method="method"
+                          :phone="phone"
+                          :action="'setup'"
+                          :show-abort="true"
+                          :busy="busy"
+                          v-on:abort="reset"
+                          v-on:verify="setupVerify">
+      </two-fa-verify-form>
+    </div>
+  </div>
+</main>

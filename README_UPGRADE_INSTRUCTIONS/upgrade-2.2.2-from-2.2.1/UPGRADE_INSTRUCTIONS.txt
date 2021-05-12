@@ -1,0 +1,32 @@
+Exbita Upgrade Guide 2.2.2
+
+IMPORTANT: Always backup your existing project files and database before upgrading.
+
+If you purchased and downloaded 2.2.2 version already, you can ignore these upgrade steps.
+================================================
+
+1. SSH into your server and navigate to your project directory (usually it is /var/www/html) and replace the following files:
+
+IMPORTANT NOTE: If you made any changes manually on these pages (adding content etc), you have to save content before replacing. After you replace all files, bring back the content using Theme Editor or manually modify these files
+
+- /app/Providers/LocaleServiceProvider.php
+- /app/config/settings.php
+- /app/models/Attachment.php
+- /database/seeds/SiteSettingsTableSeeder.php
+- /resources/js/components/AdminNavbar.htm
+- /resources/js/pages/admin/locale/edit.vue
+- /resources/js/pages/admin/settings/branding.vue
+- /resources/css/theme-addons.css
+
+2. Open this link https://exbita.com/wp-json/exbita-files/download/REPLACE_THIS_WITH_YOUR_PURCHASE_CODE
+ and download the missing files. 
+
+3. Unzip downloaded files and copy the following files to your project (confirm replacing):
+
+- /app/Http/Api/Admin/SiteSettingsController.php
+
+2. Connect to the server, open project directory (usually it is /var/www/html) and run the following commands:
+
+php artisan db:seed --class=SiteSettingsTableSeeder
+npm run production
+

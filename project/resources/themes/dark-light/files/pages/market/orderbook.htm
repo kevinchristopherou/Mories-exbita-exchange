@@ -1,0 +1,252 @@
+<div>
+    <div class="row" v-if="selectedTheme == 'default'">
+
+        <!-- MARKET BUY ORDERS -->
+        <div class="col-sm-12 col-md-6">
+            <h5 class="text-center">{{$t('order_book.buy_orders')}}
+                <icon name="arrow-up" class="text-success"></icon>
+            </h5>
+
+            <div class="orderbook-table-container">
+                <table class="table table-sm orderbook-header-table text-right">
+                    <tr>
+                        <th>{{$t('order_book.bid_price') + ' [' + market.quote_currency + ']'}}</th>
+                        <th>{{$t('order_book.amount') + ' [' + market.currency + ']'}}</th>
+                        <th>{{$t('order_book.total') + ' [' + market.quote_currency + ']'}}</th>
+                        <th>{{$t('order_book.sum') + ' [' + market.quote_currency + ']'}}</th>
+                    </tr>
+                </table>
+                <div class="buy-sell-table-container">
+                    <table class="table table-striped table-sm table-buy text-right">
+                        <tr v-for="order in buyOrders">
+                            <td>
+                                <div class="qbar" v-bind:style="{ width : getQbarWidthBuy(order.sum) + 'px'}"></div>
+                                <span>
+                                  {{order.rate | round(market.quote_currency_format_decimals)}}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                  {{order.quantity | round(market.currency_format_decimals)}}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                  {{order.total | round(market.quote_currency_format_decimals)}}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                  {{order.sum | round(market.quote_currency_format_decimals)}}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <table class="table table-sm orderbook-footer-table text-right">
+                    <tr>
+                        <th class="text-left">{{ buyOrdersTotal | round(market.quote_currency_format_decimals) }} {{ market.quote_currency}}</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- MARKET SELL ORDERS -->
+        <div class="col-sm-12 col-md-6">
+            <h5 class="text-center">{{$t('order_book.sell_orders')}}
+                <icon name="arrow-down" class="text-danger"></icon>
+            </h5>
+
+            <div class="orderbook-table-container">
+                <table class="table table-sm orderbook-header-table text-right">
+                    <tr>
+                        <th>{{$t('order_book.ask_price') + ' [' + market.quote_currency + ']'}}</th>
+                        <th>{{$t('order_book.total') + ' [' + market.quote_currency + ']'}}</th>
+                        <th>{{$t('order_book.amount') + ' [' + market.currency + ']'}}</th>
+                        <th>{{$t('order_book.sum') + ' [' + market.quote_currency + ']'}}</th>
+                    </tr>
+                </table>
+                <div class="buy-sell-table-container">
+                    <table class="table table-striped table-sm table-sell text-right">
+                        <tr v-for="order in sellOrders">
+                            <td>
+                                <span>
+                                  {{order.rate | round(market.quote_currency_format_decimals)}}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{order.total | round(market.quote_currency_format_decimals)}}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                  {{order.quantity | round(market.currency_format_decimals)}}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="qbar" v-bind:style="{ width : getQbarWidthSell(order.sum) + 'px'}"></div>
+                                <span>
+                                  {{order.sum | round(market.quote_currency_format_decimals)}}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <table class="table table-sm orderbook-footer-table text-right">
+                    <tr>
+                        <th class="text-right">{{ sellOrdersTotal | round(market.currency_format_decimals) }} {{ market.currency}}</th>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row" v-if="selectedTheme == 'dark-light'">
+
+        <!-- MARKET BUY ORDERS -->
+        <div class="col-sm-12 col-md-6 order-md-2">
+            <!-- CHART AREA -->
+            <div class="market-chart-container col-xs-12 col-md-12 mb-3 market-chart-fixed-height">
+                <iframe :src="chartUrl" class="market-chart-iframe-no-border" scrolling="no"></iframe>
+            </div>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <div class="buy-sell-card">
+                            <div class="card-header">
+                                <h3 class="text-dark-light">{{ $t('market.buy_currency', {currency: market.currency_name})}}</h3>
+                                <span v-if="authenticated">{{ quoteWallet.available }} {{market.quote_currency}} {{$t('market.available')}}</span>
+                            </div>
+                            <ul class="nav nav-tabs p-0" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="Quick-buy-tab" data-toggle="tab" href="#Quick-buy" role="tab" aria-controls="Quick-buy" aria-selected="true">Quick Buy</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="Place-order-tab" data-toggle="tab" href="#Place-order" role="tab" aria-controls="Place-order" aria-selected="false">Place Order</a>
+                                </li>
+
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="Quick-buy" role="tabpanel" aria-labelledby="Quick-buy-tab">
+                                    <quick-buy :theme="selectedTheme" :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></quick-buy>
+                                </div>
+                                <div class="tab-pane fade" id="Place-order" role="tabpanel" aria-labelledby="Place-order-tab">
+                                    <limit-buy :theme="selectedTheme" :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></limit-buy>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="buy-sell-card">
+                            <div class="card-header">
+                                <h3 class="text-dark-light">{{ $t('market.sell_currency', {currency: market.currency_name})}}</h3>
+                                <span v-if="authenticated">{{ wallet.available}} {{market.currency}} {{$t('market.available')}}</span>
+                            </div>
+                            <ul class="nav nav-tabs p-0" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link active" id="Quick-sell-tab" data-toggle="tab" href="#Quick-sell" role="tab" aria-controls="Quick-sell" aria-selected="true">Quick Sell</a>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="Place-order1-tab" data-toggle="tab" href="#Place-order1" role="tab" aria-controls="Place-order1" aria-selected="false">Place Order</a>
+                                </li>
+
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="Quick-sell" role="tabpanel" aria-labelledby="Quick-sell-tab">
+                                    <quick-sell :theme="selectedTheme" :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></quick-sell>
+                                </div>
+                                <div class="tab-pane fade" id="Place-order1" role="tabpanel" aria-labelledby="Place-order1-tab">
+
+                                    <limit-sell :theme="selectedTheme" :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></limit-sell>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-3">
+
+            <div class="buy-order-title">
+                {{$t('order_book.buy_orders')}} <img src="theme/buy-order.svg" alt="">
+            </div>
+            <div class="order-table">
+                <table class="table table-borderless">
+                    <thead>
+                    <tr>
+                        <th>{{$t('order_book.bid_price')}} <span>{{ market.quote_currency }}</span></th>
+                        <th>{{$t('order_book.amount')}} <span>{{ market.currency }}</span></th>
+                        <th>{{$t('order_book.total')}} <span>{{ market.quote_currency }}</span></th>
+                        <th>{{$t('order_book.sum')}} <span>{{ market.quote_currency }}</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="order in buyOrders">
+                        <td>
+                            <div class="green-bg" v-bind:style="{ width : getQbarWidthBuy(order.sum) + 'px'}"></div>
+                            <span>
+                                {{order.rate | round(market.quote_currency_format_decimals)}}
+                            </span>
+                        </td>
+
+                        <td>{{order.quantity | round(market.currency_format_decimals)}}</td>
+                        <td>{{order.total | round(market.quote_currency_format_decimals)}}</td>
+                        <td>
+                            {{order.sum | round(market.quote_currency_format_decimals)}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="order-footer">
+                {{ buyOrdersTotal | round(market.quote_currency_format_decimals) }} <span> {{ market.quote_currency}}</span>
+            </div>
+        </div>
+
+        <!-- MARKET SELL ORDERS -->
+        <div class="col-sm-12 col-md-3 order-md-3">
+            <div class="buy-order-title">
+                {{$t('order_book.sell_orders')}} <img src="theme/sell-order.svg" alt="">
+            </div>
+            <div class="order-table">
+                <table class="table table-borderless table-sell-2">
+                    <thead>
+                    <tr>
+                        <th>{{$t('order_book.ask_price')}} <span>{{ market.quote_currency }}</span></th>
+                        <th>{{$t('order_book.amount')}} <span>{{ market.currency }}</span></th>
+                        <th>{{$t('order_book.total')}} <span>{{ market.quote_currency }}</span></th>
+                        <th>{{$t('order_book.sum')}} <span>{{ market.quote_currency }}</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="order in sellOrders">
+                        <td>
+                            {{order.rate | round(market.quote_currency_format_decimals)}}
+                        </td>
+                        <td>{{order.quantity | round(market.currency_format_decimals)}}</td>
+                        <td>{{order.total | round(market.quote_currency_format_decimals)}}</td>
+                        <td>
+                            <div class="red-bg" v-bind:style="{ width : getQbarWidthSell(order.sum) + 'px'}"></div>
+                            <span>
+                              {{order.sum | round(market.quote_currency_format_decimals)}}
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="order-footer">
+                {{ sellOrdersTotal | round(market.currency_format_decimals) }} <span> {{ market.currency}}</span>
+            </div>
+
+        </div>
+    </div>
+</div>

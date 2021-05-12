@@ -1,0 +1,229 @@
+<div>
+  <div v-if="market">
+
+    <div class="currency-header" v-if="selectedTheme == 'dark-light'">
+      <div class="row no-gutters">
+      <div class="col-12 col-md-auto">
+        <div class="dropdown ">
+          <a class="dropdown-toggle select-currency " href="#" role="button" id="currency-dropdown" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i v-bind:class="'cc ' + market.currency"></i> &nbsp; {{ market.name }}
+          </a>
+
+          <div class="dropdown-menu currency-dropdown" aria-labelledby="currency-dropdown">
+            <ul>
+
+              <li v-for="(item_market, index) in markets">
+                <router-link tag="a" :to="{ name: 'market.inner',params: {marketName: item_market.name}}">
+                  <i :class="'currency-icon bg-color-' + getBackgroundColor(index)">
+                    <span class="current-icon-text">{{ getMarketInitials(item_market.name) }}</span>
+                  </i>
+                  <span>
+                    {{ item_market.name }}
+                    <small>
+                      {{ item_market.bid | round(item_market.quote_currency_format_decimals) }} {{item_market.quote_currency}}
+                    </small>
+                  </span>
+                </router-link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md currenly-list ">
+        <div class="row no-guttons">
+          <div class="col-4 col-md d-flex">
+            <h4>
+              {{ market.last | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}
+              <small>{{ $t('market.last_price') }}</small>
+            </h4>
+          </div>
+          <div class="col-4 col-md d-flex">
+            <h4>
+              {{ market.bid | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}
+              <small>{{ $t('market.bid_price') }}</small>
+            </h4>
+          </div>
+          <div class="col-4 col-md d-flex">
+            <h4>
+              {{ market.ask | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}
+              <small>{{ $t('market.ask_price') }}</small>
+            </h4>
+          </div>
+          <div class="col-4 col-md d-flex">
+            <h4>
+              {{ market.high_24h | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}
+              <small>{{ $t('market.highest_24h') }}</small>
+            </h4>
+          </div>
+          <div class="col-4 col-md d-flex">
+            <h4>
+              {{ market.high_24h | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}
+              <small>{{ $t('market.lowest_24h') }}</small>
+            </h4>
+          </div>
+          <div class="col-4 col-md d-flex">
+            <h4>
+              {{ market.change_24h | round(market.quote_currency_format_decimals) }} 
+              (<span v-if="market.change_24h_percent < 0" class="text-red">%{{ market.change_24h_percent | round(2) }}</span>
+                <span v-if="market.change_24h_percent > 0" class="text-green">%{{ market.change_24h_percent | round(2) }}</span>
+                <span v-if="market.change_24h_percent == 0">%{{ market.change_24h_percent | round(2) }}</span>)
+              <small>{{ $t('market.change_24h') }}</small>
+            </h4>
+          </div>
+          <div class="col-4 col-md d-flex">
+            <h4>
+              {{ market.volume_24h | round(market.currency_format_decimals) }}  {{ market.currency }}
+              <small>{{ $t('market.volume_24h') }}</small>
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="row" v-if="selectedTheme == 'default'">
+      <!-- CHART AREA -->
+      <div class="market-chart-container col-xs-12 col-md-8 mb-3 market-chart-fixed-height">
+        <iframe :src="chartUrl" class="market-chart-iframe" scrolling="no"></iframe>
+      </div>
+
+      <!-- MARKET STATS -->
+      <div class="market-values-container col-xs-12 col-md-4 mb-3 market-chart-fixed-height">
+        <h3><i v-bind:class="'cc ' + market.currency"></i> {{ market.name }}</h3>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.last_price') }}</span>
+          <span class="value">{{ market.last | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.bid_price') }}</span>
+          <span class="value">{{ market.bid | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.ask_price') }}</span>
+          <span class="value">{{ market.ask | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.highest_24h') }}</span>
+          <span class="value">{{ market.high_24h | round(market.quote_currency_format_decimals) }} {{ market.quote_currency }}</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.lowest_24h') }}</span>
+          <span class="value">{{ market.low_24h | round(market.quote_currency_format_decimals)}} {{ market.quote_currency }}</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.change_24h') }}</span>
+          <span class="value">{{ market.change_24h | round(market.quote_currency_format_decimals) }} (%{{ market.change_24h_percent | round(2) }})</span>
+        </div>
+        <div class="market-value clearfix">
+          <span class="label">{{ $t('market.volume_24h') }}</span>
+          <span class="value">{{ market.volume_24h | round(market.currency_format_decimals) }}  {{ market.currency }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDER FORMS -->
+    <div class="row mt-4" v-if="authenticated && quoteWallet && wallet && (selectedTheme == 'default')">
+      <div class="col-xs-12 col-md-6 mb-3">
+
+        <div class="clearfix">
+          <h3 class="float-left">{{ $t('market.buy_currency', {currency: market.currency_name})}}</h3>
+          <span class="tab-head-available">
+              {{ quoteWallet.available }} {{market.quote_currency}} {{$t('market.available')}}
+            </span>
+        </div>
+
+        <b-card no-body>
+          <b-tabs card>
+            <!--QUICK BUY TAB-->
+            <b-tab :title="$t('market.quick_buy')" active>
+              <quick-buy :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></quick-buy>
+            </b-tab>
+
+            <!--LIMIT BUY TAB-->
+            <b-tab :title="$t('market.place_order')">
+              <limit-buy :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></limit-buy>
+            </b-tab>
+          </b-tabs>
+        </b-card>
+
+      </div>
+      <div class="col-xs-12 col-md-6 mb-3">
+
+        <div class="clearfix">
+          <h3 class="float-left">{{ $t('market.sell_currency', {currency: market.currency_name})}}</h3>
+          <span class="tab-head-available">
+              {{ wallet.available}} {{market.currency}} {{$t('market.available')}}
+            </span>
+        </div>
+
+        <b-card no-body>
+          <b-tabs card>
+
+            <!--QUICK SELL TAB-->
+            <b-tab :title="$t('market.quick_sell')" active>
+              <quick-sell :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></quick-sell>
+            </b-tab>
+
+            <!--LIMIT SELL TAB-->
+            <b-tab :title="$t('market.place_order')">
+              <limit-sell :market="market" :wallet="wallet" :quoteWallet="quoteWallet"></limit-sell>
+            </b-tab>
+          </b-tabs>
+        </b-card>
+
+      </div>
+    </div>
+
+    <!-- MY ORDERS BOOK -->
+    <my-orders :key="market.id" :market="market" v-if="authenticated && (selectedTheme == 'default')"></my-orders>
+
+    <!-- ORDER BOOK -->
+    <orderbook :theme="selectedTheme" :authenticated="authenticated" :wallet="wallet" :quoteWallet="quoteWallet" :chart-url="chartUrl" :market="market"></orderbook>
+
+    <!-- MARKET HISTORY -->
+    <history v-if="selectedTheme != 'dark-light'" :market="market"></history>
+
+    <my-history :market="market" v-bind:market-name="market.name" v-if="authenticated && (selectedTheme != 'dark-light')"></my-history>
+
+    <div v-if="selectedTheme == 'dark-light'" class="padding-4">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li v-if="authenticated" class="nav-item" role="presentation">
+          <a class="nav-link active" id="Open-Orders-tab" data-toggle="tab" href="#Open-Orders" role="tab" aria-controls="Open-Orders" aria-selected="true">
+            Your Open Orders
+          </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="Market-History-tab" data-toggle="tab" href="#Market-History" role="tab" aria-controls="Market-History" aria-selected="false">
+            Market History
+          </a>
+        </li>
+        <li v-if="authenticated" class="nav-item" role="presentation">
+          <a class="nav-link" id="Filled-Orders-tab" data-toggle="tab" href="#Filled-Orders" role="tab" aria-controls="Filled-Orders" aria-selected="false">
+            Filled Orders
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="Open-Orders" role="tabpanel" aria-labelledby="Open-Orders-tab">
+          <!-- MY ORDERS BOOK -->
+          <my-orders :theme="selectedTheme" :key="market.id" :market="market" v-if="authenticated"></my-orders>
+        </div>
+        <div :class="!authenticated ? 'tab-pane fade show active' : 'tab-pane fade'" id="Market-History" role="tabpanel" aria-labelledby="Market-History-tab">
+          <history :market="market" :theme="selectedTheme"></history>
+        </div>
+        <div class="tab-pane fade" id="Filled-Orders" role="tabpanel" aria-labelledby="Filled-Orders-tab">
+          <!-- MARKET HISTORY -->
+          <my-history :theme="selectedTheme" :market="market" v-bind:market-name="market.name" v-if="authenticated"></my-history>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div v-else>
+    <icon name="spinner" spin scale="4x"></icon>
+    <div class="text-center">
+      <h3>{{ $t('market.loading',{name: marketName})}}</h3>
+    </div>
+  </div>
+</div>

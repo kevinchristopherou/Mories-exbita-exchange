@@ -1,0 +1,12 @@
+<main class="inner-container">
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('two_factor_auth') }}</h3>
+
+  <two-fa-verify-form
+      :verify-error="verifyError"
+      :show-logout="true"
+      :method="method"
+      :button-label="'login'"
+      v-on:verify="verify">
+  </two-fa-verify-form>
+
+</main>

@@ -1,0 +1,8 @@
+.input-group-datepicker {
+    width: 0px;
+    border: none;
+}
+
+.input-group-datepicker input {
+    height: 38px;
+}

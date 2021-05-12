@@ -1,0 +1,111 @@
+<main class="whitebox">
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('deposit_crypto') }}</h3>
+
+
+  <form v-on:submit.prevent>
+    <!-- Currency -->
+    <div class="form-group">
+      <label>{{ $t('deposit_currency') }}</label>
+      <select size="1" name="currency_id" class="form-control input-lg"
+              v-model="form.currency_id" :placeholder="$t('deposit_currency')"
+              v-on:change="selectWallet"
+              :class="{ 'is-invalid': form.errors.has('currency_id') }"
+              :disabled="busy">
+        <option value="">{{ $t('deposit_currency') }}</option>
+        <option v-for="wallet in wallets" v-bind:value="wallet.currency_id">{{ wallet.currency }}</option>
+      </select>
+      <has-error :form="form" field="currency_id"></has-error>
+    </div>
+
+    <div v-if="currency" class="form-group text-center">
+
+      <h3 class="title-h3 color-dark-blue text-center">{{ currency.currency }}</h3>
+      <div v-if="address">
+
+        <qrcode-vue :value="address" :size="150" level="M"></qrcode-vue>
+
+        <div class="w-70 col-centered mt-4">
+          <textarea id="walletAddress" class="form-control" v-model="address"></textarea>
+          <button class="btn btn-green btn-block mt-2 mb-4" v-on:click="copyAddress">{{$t('deposit_copy')}}</button>
+        </div>
+      </div>
+
+      <div class="w-50 col-centered mt-4" v-if="showNewAddress">
+        {{ $t('or')}}
+        <button class="btn btn-info btn-block mt-4"
+                v-on:click="generateAddressConfirm"
+                v-button-loading="busy">
+          {{$t('deposit_address_generate')}}
+        </button>
+      </div>
+
+      <div v-if="autoGenerate && busy" class="text-center">
+        <icon name="spinner" scale="2x" spin></icon>
+        <br>
+        <br>
+        {{ $t('deposit_address_generating')}}
+      </div>
+
+      <div class="alert alert-danger mt-2" v-if="error">
+        {{ $t(error) }}
+      </div>
+
+    </div>
+
+  </form>
+
+  <div v-if="pending.length > 0">
+    <h3 class="title-h3 mt-5 color-dark-blue text-center">{{ $t('deposit.pending') }}</h3>
+    <table class="table table-sm table-bordered table-hover table-striped table-responsive-md">
+      <thead>
+      <tr>
+        <th>{{ $t('date') }}</th>
+        <th>{{ $t('deposit_amount') }}</th>
+        <th>{{ $t('deposit.confirmations') }}</th>
+        <th>{{ $t('deposit.address') }}</th>
+        <th>{{ $t('tx_id') }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="tx in pending">
+        <td>{{ tx.date | tz_datetime }}</td>
+        <td>{{ tx.amount }} {{ tx.currency }}</td>
+        <td>{{ tx.confirmations}}</td>
+        <td>{{ tx.address}}</td>
+        <td>{{ tx.txid }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h3 class="title-h3 mt-5 color-dark-blue text-center">{{ $t('deposit_history') }}</h3>
+
+    <div class="row">
+      <div class="col-xs-12 col-md-6">
+        <laravel-pagination :dataset="history" @change="loadData"></laravel-pagination>
+      </div>
+      <div class="col-xs-12 col-md-6 table-filter">
+        <table-search :search-fields="searchFields" v-on:search="loadData"></table-search>
+      </div>
+    </div>
+
+    <table class="table table-sm table-bordered table-hover table-striped table-responsive-md">
+      <thead>
+      <tr>
+        <th>{{ $t('deposit_amount') }}</th>
+        <th>{{ $t('tx_id') }}</th>
+        <th>{{ $t('date') }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="deposit in history.data">
+        <td>{{ deposit.amount }} {{ deposit.currency }}</td>
+        <td>{{ deposit.txid }}</td>
+        <td>{{ deposit.date | tz_datetime }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <laravel-pagination :dataset="history" @change="loadData"></laravel-pagination>
+  </div>
+</main>

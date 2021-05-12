@@ -1,0 +1,192 @@
+<header id="secure-header">
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <router-link class="navbar-brand text-uppercase" :to="{ path: '/adashboard'}">
+        <div v-if="sitesettings.SITE_NAME.value"><span class="text-400">{{ sitesettings.SITE_NAME.value }}</span> ADMIN</div>
+        <div v-if="!sitesettings.SITE_NAME.value">EX<span class="text-400">BITA</span> ADMIN</div>
+    </router-link>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+
+        <router-link tag="li" class="nav-item" :to="{ name: 'admin.users'}">
+          <a class="nav-link">
+            <icon name="user"></icon>
+            {{$t('admin.users.users')}}
+          </a>
+        </router-link>
+
+        <router-link tag="li" class="nav-item" :to="{ name: 'admin.verifications'}">
+          <a class="nav-link">
+            <icon name="address-card"></icon>
+            {{$t('admin.idv.verifications')}}
+          </a>
+        </router-link>
+
+        <li class="nav-item" :class="{ show: isActive('admin.payments') }">
+          <a class="nav-link dropdown-toggle">
+            <icon name="suitcase"></icon>
+            {{$t('payments')}}
+          </a>
+          <ul class="dropdown-menu" :class="{ show: isActive('admin.payments') }">
+
+            <li class="nav-item" :class="{ show: isActive('admin.payments.deposit') }">
+              <a class="nav-link dropdown-toggle">
+                <icon name="plus"></icon>
+                {{$t('deposit.deposit')}}
+              </a>
+              <ul class="dropdown-menu" :class="{ show: isActive('admin.payments.deposit') }">
+
+                <router-link tag="li" :to="{name: 'admin.payments.deposit.fiat'}" class="dropdown-item">
+                  <icon name="money"></icon>
+                  {{ $t('payments_fiat_wallets')}}
+                </router-link>
+
+                <router-link tag="li" :to="{name: 'admin.payments.deposit.crypto'}" class="dropdown-item">
+                  <icon name="bitcoin"></icon>
+                  {{ $t('payments_crypto_wallets')}}
+                </router-link>
+
+              </ul>
+            </li>
+
+            <li class="nav-item" :class="{ show: isActive('admin.payments.withdraw') }">
+              <a class="nav-link dropdown-toggle">
+                <icon name="minus"></icon>
+                {{$t('withdraw.title')}}
+              </a>
+              <ul class="dropdown-menu" :class="{ show: isActive('admin.payments.withdraw') }">
+
+                <router-link tag="li" :to="{name: 'admin.payments.withdraw.fiat'}" class="dropdown-item">
+                  <icon name="money"></icon>
+                  {{ $t('payments_fiat_wallets')}}
+                </router-link>
+
+                <router-link tag="li" :to="{name: 'admin.payments.withdraw.crypto'}" class="dropdown-item">
+                  <icon name="bitcoin"></icon>
+                  {{ $t('payments_crypto_wallets')}}
+                </router-link>
+
+              </ul>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item" :class="{ show: isActive('admin.exchange_settings') }">
+          <a class="nav-link dropdown-toggle">
+            <icon name="cogs"></icon>
+            {{$t('admin.exchange_settings.title')}}
+          </a>
+          <ul class="dropdown-menu" :class="{ show: isActive('admin.exchange_settings') }">
+            <router-link tag="li" :to="{name: 'admin.exchange_settings.markets'}" class="dropdown-item">
+              <icon name="shopping-cart"></icon>
+              {{ $t('admin.exchange_settings.markets.nav')}}
+            </router-link>
+            <router-link tag="li" :to="{name: 'admin.exchange_settings.commission'}" class="dropdown-item">
+              <icon name="money"></icon>
+              {{ $t('admin.exchange_settings.commissions.nav')}}
+            </router-link>
+
+            <router-link tag="li" :to="{name: 'admin.exchange_settings.currencies'}" class="dropdown-item">
+              <icon name="bitcoin"></icon>
+              {{ $t('admin.exchange_settings.currencies.nav')}}
+            </router-link>
+
+            <router-link tag="li" :to="{name: 'admin.exchange_settings.fiat_currencies'}" class="dropdown-item">
+              <icon name="dollar"></icon>
+              {{ $t('admin.exchange_settings.fiat_currencies.nav')}}
+            </router-link>
+
+          </ul>
+        </li>
+
+        <li class="nav-item" :class="{ show: isActive('admin.settings') }">
+          <a class="nav-link dropdown-toggle">
+            <icon name="gear"></icon>
+            {{$t('admin.site_settings.site_settings')}}
+          </a>
+          <ul class="dropdown-menu" :class="{ show: isActive('admin.settings') }">
+
+            <router-link tag="li" :to="{name: 'admin.settings.branding'}" class="dropdown-item">
+              <icon name="id-card"></icon>
+              {{ $t('admin.site_settings.branding')}}
+            </router-link>
+
+            <router-link tag="li" :to="{name: 'admin.settings.social_media'}" class="dropdown-item">
+              <icon name="facebook"></icon>
+              {{ $t('admin.site_settings.social_media')}}
+            </router-link>
+
+            <router-link tag="li" :to="{name: 'admin.settings.email'}" class="dropdown-item">
+              <icon name="envelope"></icon>
+              {{ $t('admin.site_settings.email')}}
+            </router-link>
+
+            <router-link tag="li" :to="{name: 'admin.settings.aws-s3'}" class="dropdown-item">
+              <icon name="database"></icon>
+              {{ $t('admin.site_settings.aws-s3')}}
+            </router-link>
+
+            <router-link tag="li" :to="{name: 'admin.settings.sms-provider'}" class="dropdown-item">
+              <icon name="comment-o"></icon>
+              {{ $t('admin.site_settings.sms-provider')}}
+            </router-link>
+
+            <router-link tag="li" :to="{name: 'admin.settings.nocaptcha'}" class="dropdown-item">
+              <icon name="key"></icon>
+              {{ $t('admin.site_settings.nocaptcha')}}
+            </router-link>
+
+            <router-link tag="li" :to="{name: 'admin.settings.bitcoind'}" class="dropdown-item">
+              <icon name="bitcoin"></icon>
+              {{ $t('admin.site_settings.bitcoind')}}
+            </router-link>
+
+            <router-link tag="li" :to="{name: 'admin.settings.ethereum'}" class="dropdown-item">
+                <icon name="compass"></icon>
+                {{ $t('admin.site_settings.ethereum')}}
+            </router-link>
+
+          </ul>
+        </li>
+
+        <router-link tag="li" class="nav-item" :to="{ name: 'admin.health_checker'}">
+          <a class="nav-link">
+            <icon name="heart"></icon>
+            {{$t('admin.health_checker.title')}}
+          </a>
+        </router-link>
+
+        <router-link tag="li" class="nav-item" :to="{ name: 'admin.theme_editor'}">
+          <a class="nav-link">
+            <icon name="paint-brush"></icon>
+            {{$t('admin.theme_editor.title')}}
+          </a>
+        </router-link>
+
+        <router-link tag="li" class="nav-item" :to="{ name: 'admin.locale'}">
+          <a class="nav-link">
+            <icon name="language"></icon>
+            {{$t('admin.locale.nav')}}
+          </a>
+        </router-link>
+
+        <li class="nav-item">
+          <a class="nav-link" v-on:click="logout">
+            <icon name="sign-out"></icon>
+            {{$t('logout')}}
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/#/home">
+            <icon name="exchange"></icon>
+            {{$t('market.market_home')}}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

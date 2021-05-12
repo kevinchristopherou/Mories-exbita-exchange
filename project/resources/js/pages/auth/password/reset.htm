@@ -1,0 +1,57 @@
+<main class="inner-container">
+  <h3 class="title-h3 color-dark-blue text-center">{{ $t('reset_password') }}</h3>
+
+  <form @submit.prevent="reset" @keydown="form.onKeydown($event)" v-if="!success">
+    <div class="form-group" v-if="error">
+        <span class="has-error">
+        <label class="control-label">{{ $t(error) }}</label>
+        </span>
+    </div>
+
+    <!-- Email -->
+    <input v-model="form.id" type="hidden" name="id">
+
+    <div class="form-group">
+      <input v-model="form.email" type="email" name="email"
+             class="form-control input-lg" :placeholder="$t('email')"
+             :class="{ 'is-invalid': form.errors.has('email') }">
+      <span class="has-error">
+          <has-error :form="form" field="email"></has-error>
+        </span>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <input type="password" name="password" class="form-control input-lg"
+             v-model="form.password"
+             :placeholder="$t('password')"
+             :class="{ 'is-invalid': form.errors.has('password') }">
+      <span class="has-error">
+          <has-error :form="form" field="password"></has-error>
+        </span>
+    </div>
+
+    <!-- Password Confirmation -->
+    <div class="form-group">
+      <input class="form-control input-lg" type="password" name="password_confirmation"
+             v-model="form.password_confirmation"
+             :placeholder="$t('confirm_password')"
+             :class="{ 'is-invalid': form.errors.has('password_confirmation') }">
+      <span class="has-error">
+          <has-error :form="form" field="password_confirmation"></has-error>
+        </span>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-group text-center">
+      <v-button :loading="form.busy" type="green" big>{{ $t('reset_password') }}</v-button>
+    </div>
+  </form>
+
+  <div v-if="success" class="text-center">
+    <h3>{{ $t(success)}}</h3>
+    <router-link :to="{ name: 'welcome' }">
+      <button class="btn btn-green btn-big mt-4">{{ $t('home') }}</button>
+    </router-link>
+  </div>
+</main>

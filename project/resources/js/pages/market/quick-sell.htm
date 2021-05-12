@@ -1,0 +1,54 @@
+<div>
+  <div class="form-group">
+    <div v-if="theme != 'dark-light'">{{$t('market.quick_sell_text',{currency: market.currency_name})}}</div>
+    <label v-if="theme == 'dark-light'">{{$t('market.quick_sell_text',{currency: market.currency_name})}}</label>
+  </div>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">{{market.currency}}</span>
+    </div>
+    <money-input :placeholder="$t('market.enter_amount')"
+                 v-model="quickSellAmount"
+                 :decimals="market.currency_format_decimals"></money-input>
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" v-on:click="quickSellMax">
+        <icon name="angle-double-up"></icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="clearfix">
+    <div class="conversation d-flex justify-content-between align-items-center" v-if="market.bid > 0 && quickSellAmount > 0">
+      {{ $t('market.approximately')}}
+      <span >
+        <b>{{quickSellApproximate | round(market.quote_currency_format_decimals)}}</b> {{market.quote_currency}}
+        <icon name="question-circle" class="text-primary" id="quickSellHelpText"></icon>
+        <b-popover target="quickSellHelpText" placement="bottom" triggers="click blur">
+          <div v-html="quickSellHelpText"></div>
+        </b-popover>
+      </span>
+    </div>
+    <div class="conversation d-flex justify-content-between align-items-center" v-if="(market.bid <= 0) || !quickSellAmount">
+      <div v-if="!quickSellAmount">&nbsp;</div>
+      <div v-if="market.bid <= 0 && (quickSellAmount > 0)">
+        Approx.
+        <span >
+          N/A
+          <icon name="question-circle" class="text-primary" id="quickSellNAHelpText"></icon>
+          <b-popover target="quickSellNAHelpText" placement="bottom" triggers="click blur">
+            <div>{{ $t('market.approximate_no_bid_price')}}</div>
+          </b-popover>
+        </span>
+      </div>
+    </div>
+    <button v-if="authenticated" :class="theme == 'dark-light' ? 'btn btn-primary btn-lg btn-block btn-sell ' : 'btn btn-green btn-sell float-right'" v-on:click="quickSell" v-button-loading="busy">
+      {{ $t('market.quick_sell')}} &nbsp; <img src="theme/arrow-incircle-right.svg" alt="">
+    </button>
+    <div v-if="!authenticated" class="button-div">
+      <div class="sell-login">
+        <router-link tag="a" class="nav-item" :to="{ name: 'login'}">Log In</router-link>  or <router-link tag="a" class="nav-item" :to="{ name: 'register'}">Register</router-link> To Continue
+      </div>
+    </div>
+  </div>
+</div>

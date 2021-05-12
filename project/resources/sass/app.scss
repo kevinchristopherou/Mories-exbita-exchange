@@ -1,0 +1,30 @@
+@import 'variables';
+
+$theme-imports: unquote("../themes/" + $selected-theme + "/css/theme.css");
+
+@if $selected-theme == 'dark-light' {
+    @import url("../themes/default/css/theme.css");
+    @import url($theme-imports);
+} 
+
+@import 'elements/card';
+@import 'elements/transitions';
+@import 'elements/validation';
+@import '../css/cubeportfolio.min.css';
+@import '../css/magic-check.css';
+
+@import url($theme-imports);
+@import '../css/theme-addons.css';
+@import '../css/responsive.css';
+
+@import '../css/app/main.css';
+@import '../css/app/market-inner.css';
+@import '../css/app/toasted.css';
+@import '../css/app/buttons.css';
+@import '../css/app/table.css';
+@import '../css/app/datepicker.css';
+@import '../css/app/nav.css';
+@import '../css/app/topbar.css';
+@import '../css/app/dashboard.css';
+@import '../css/app/orderbook.css';
+@import '../css/app/extra_customizations.css';

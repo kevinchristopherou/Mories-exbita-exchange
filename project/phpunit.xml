@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="true">
+    <testsuites>
+        <testsuite name="Feature">
+            <directory suffix="Test.php">./tests/Feature</directory>
+        </testsuite>
+
+        <testsuite name="Unit">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./app</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="BITCOIND_PORT" value="18332"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="PHPUNIT_TEST_SUITE" value="yes"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="DB_CONNECTION" value="mysql"/>
+        <env name="DB_DATABASE" value="exbita_test"/>
+        <env name="SMS_ENABLED" value="no"/>
+        <env name="SMS_TIMEOUT" value="2"/>
+        <env name="SKIP_WALLET_TESTS" value="1" />
+        <env name="LICENSE_ACTIVATED" value="installed" />
+        <env name="LICENSE_ACTIVATED_URL" value="localhost" />
+    </php>
+</phpunit>
